@@ -1,4 +1,4 @@
-"""Train the winter models at the default p_as 0.5: GRAM, filtered and dense,
+"""Train the winter models at p_as 0.5: GRAM, filtered and dense,
 seeds 0-2. In where-the-fives-go these came from t7_run.py, which also trained
 two other concepts. Every other p_as is trained by `python t7_pas.py train`,
 and p_as 0.95/0.98 and seeds 3-5 by `python t7_pas.py more`. Models whose

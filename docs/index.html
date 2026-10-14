@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Where Winter Goes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&display=swap">
+<style>
+/* Layout: one reading column (~66ch) on cool winter paper; figures widen to the 960px frame.
+   Same identity as the Winter Steering Results page. Data hues follow figures/t7_pas.png:
+   shipped model teal, module attached violet, push toward "winter" brick, winter-data vectors ochre, random grey.
+   Token roles reuse them: 'winter' brick, scaffold ochre, activity violet, item teal. */
+:root {
+  --bg: #f1f4f6;
+  --surface: #ffffff;
+  --ink: #17222c;
+  --muted: #56636f;
+  --rule: #d2dae1;
+  --accent: #2b5d8e;
+  --band: #dde8f2;
+  --snow: #e4eef7;
+  --off: #1f8a70;
+  --off-text: #187560;
+  --on: #7b5ea7;
+  --word: #b3423a;
+  --data: #c78a2d;
+  --data-text: #8a5d12;
+  --rand: #9aa4ad;
+  --dense: #33557b;
+  --display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body: "Literata", Georgia, "Times New Roman", serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e141a; --surface: #151e27; --ink: #e2e9ef; --muted: #98a6b3; --rule: #2a3642;
+    --accent: #8bbbe9; --band: #1c2d3d; --snow: #1b2a39;
+    --off: #47c3a0; --off-text: #47c3a0; --on: #a98bd6; --word: #e47462; --data: #dfa94a; --data-text: #dfa94a;
+    --rand: #6c7a86; --dense: #8fb5df;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e141a; --surface: #151e27; --ink: #e2e9ef; --muted: #98a6b3; --rule: #2a3642;
+  --accent: #8bbbe9; --band: #1c2d3d; --snow: #1b2a39;
+  --off: #47c3a0; --off-text: #47c3a0; --on: #a98bd6; --word: #e47462; --data: #dfa94a; --data-text: #dfa94a;
+  --rand: #6c7a86; --dense: #8fb5df;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.62;
+}
+.page { max-width: 960px; margin: 0 auto; padding-inline: 20px; padding-block: 44px 72px; }
+@media (max-width: 480px) { .page { padding-inline: 16px; } body { font-size: 16px; } }
+.prose { max-width: 66ch; }
+section { display: flex; flex-direction: column; gap: 18px; padding-block: 34px 6px; border-top: 1px solid var(--rule); }
+header { display: flex; flex-direction: column; gap: 16px; padding-block-end: 30px; }
+
+.eyebrow {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted);
+}
+h1, h2, h3 { font-family: var(--display); line-height: 1.12; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(34px, 6vw, 52px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: clamp(23px, 3.4vw, 30px); font-weight: 600; }
+h3 { font-size: 19px; font-weight: 600; }
+p { margin: 0; }
+.lede { font-size: 19px; line-height: 1.56; }
+@media (max-width: 480px) { .lede { font-size: 17.5px; } }
+.muted { color: var(--muted); }
+.small { font-size: 14.5px; line-height: 1.55; }
+strong { font-weight: 600; }
+.mono, code { font-family: var(--mono); font-size: 0.86em; }
+a { color: var(--accent); }
+sub { font-size: 0.7em; line-height: 0; }
+.nw { white-space: nowrap; }
+
+/* at-a-glance findings */
+.glance { display: grid; grid-template-columns: minmax(0, 11.5rem) minmax(0, 1fr); gap: 14px 22px; margin: 4px 0 0; }
+.glance dt { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); padding-top: 4px; }
+.glance dd { margin: 0; min-width: 0; }
+@media (max-width: 620px) { .glance { grid-template-columns: minmax(0, 1fr); gap: 4px; } .glance dd { margin-bottom: 12px; } }
+
+/* stories */
+.story {
+  font-family: var(--mono); font-size: 13.5px; line-height: 1.75;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 14px 16px; overflow-wrap: anywhere; min-width: 0;
+}
+.story .tag { display: block; font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.stories { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 720px) { .stories { grid-template-columns: minmax(0, 1fr); } }
+mark { background: transparent; color: inherit; border-radius: 3px; padding: 0 2px; font-weight: 600; }
+mark.r-w { color: var(--word); background: var(--snow); box-shadow: inset 0 -2px 0 var(--word); }
+mark.r-s { color: var(--data-text); }
+mark.r-a { color: var(--on); }
+mark.r-i { color: var(--off-text); }
+mark.r-n { color: var(--muted); font-weight: 400; }
+.key { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; color: var(--muted); }
+
+/* setup blocks */
+.models { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 760px) { .models { grid-template-columns: minmax(0, 1fr); } }
+.model { display: flex; flex-direction: column; gap: 6px; min-width: 0; padding-top: 10px; border-top: 3px solid var(--rule); }
+.model h3 { font-size: 17px; }
+.model p { font-size: 15px; line-height: 1.55; }
+.measure { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 760px) { .measure { grid-template-columns: minmax(0, 1fr); } }
+.measure > div { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.measure p { font-size: 15px; line-height: 1.55; }
+.prompt { font-family: var(--mono); font-size: 14px; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 12px; align-self: flex-start; max-width: 100%; overflow-wrap: anywhere; }
+.blank { display: inline-block; min-width: 3.6em; border-bottom: 2px solid var(--accent); text-align: center; color: var(--accent); }
+.prereg { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; display: flex; flex-direction: column; gap: 8px; }
+.prereg dl { margin: 0; display: grid; grid-template-columns: minmax(0, 8.5rem) minmax(0, 1fr); gap: 6px 16px; font-size: 15px; line-height: 1.5; }
+.prereg dt { font-weight: 600; }
+.prereg dd { margin: 0; min-width: 0; }
+@media (max-width: 520px) { .prereg dl { grid-template-columns: minmax(0, 1fr); gap: 2px; } .prereg dd { margin-bottom: 8px; } }
+
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+.tablewrap { overflow-x: auto; min-width: 0; }
+th, td { text-align: left; padding: 9px 14px 9px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--display); font-weight: 600; font-size: 14.5px; line-height: 1.3; }
+td { font-size: 14.5px; line-height: 1.45; }
+td.num, th.num { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+td.num { white-space: nowrap; }
+tr.gstart td, tr.gstart th { border-top: 2px solid var(--rule); }
+.vt { min-width: 760px; }
+.vec { min-width: 620px; }
+.yes { color: var(--off-text); font-weight: 600; }
+.no { color: var(--word); font-weight: 600; }
+.sub { display: block; color: var(--muted); font-size: 12px; }
+
+/* figures */
+.fig { position: relative; display: flex; flex-direction: column; gap: 10px; min-width: 0; padding-block: 6px; }
+.fig h3 { font-size: 18px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.dot.hollow { background: transparent !important; border: 2px solid; }
+.lg { width: 22px; height: 0; border-top: 2.5px solid; flex: none; }
+.lg.dash { border-top-style: dashed; }
+.sq { width: 11px; height: 11px; border-radius: 2px; flex: none; }
+.chart { width: 100%; min-width: 0; }
+.chart svg { display: block; }
+.caption { font-size: 14px; color: var(--muted); line-height: 1.5; max-width: 72ch; }
+.tip {
+  position: absolute; z-index: 5; pointer-events: none; max-width: 260px;
+  background: var(--ink); color: var(--bg); font: 12px/1.45 var(--mono);
+  padding: 6px 9px; border-radius: 5px;
+}
+.hit { cursor: pointer; }
+.hit:focus { outline: none; }
+.hit:focus-visible + circle, .hit:focus-visible { stroke: var(--accent); stroke-width: 2; }
+
+/* story outcomes */
+.sgrid { display: grid; grid-template-columns: minmax(0, 14rem) repeat(3, minmax(0, 1fr)) minmax(0, 7.4rem); gap: 0 14px; align-items: center; }
+.sgrid .hd { font-family: var(--display); font-weight: 600; font-size: 13.5px; line-height: 1.25; padding-bottom: 8px; align-self: end; }
+.sgrid .grp { grid-column: 1 / -1; font-family: var(--display); font-weight: 600; font-size: 15px; padding: 14px 0 4px; border-top: 1px solid var(--rule); }
+.sgrid .lab { font-size: 14.5px; line-height: 1.3; padding-block: 7px; min-width: 0; }
+.cellm { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) 2.9rem; gap: 8px; align-items: center; padding-block: 7px; }
+.cellm .mname { display: none; }
+.trk { position: relative; height: 16px; border-radius: 2px; border: 1px solid var(--rule); overflow: hidden;
+  background: linear-gradient(to right, var(--rule) 1px, transparent 1px) 0 0 / 25% 100%, var(--surface); }
+.trk .fl { position: absolute; inset: 0 auto 0 0; opacity: 0.32; }
+.trk .tk { position: absolute; top: 1px; bottom: 1px; width: 2px; margin-left: -1px; }
+.cellm .v { font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.given { font-size: 13px; color: var(--muted); font-style: italic; padding-block: 7px; }
+.ratio { font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; text-align: right; padding-block: 7px; }
+.ratio .sub { font-size: 11px; }
+.ratio .mname { display: none; }
+.sgrid .ax { font-family: var(--mono); font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; padding-right: calc(2.9rem + 8px); }
+@media (max-width: 760px) {
+  .sgrid { grid-template-columns: minmax(0, 1fr); }
+  .sgrid .hd, .sgrid .axrow { display: none; }
+  .sgrid .lab { padding-bottom: 2px; font-weight: 600; }
+  .cellm { grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr) 2.9rem; padding-block: 3px; }
+  .cellm .mname { display: block; font-size: 12.5px; color: var(--muted); }
+  .given { padding-block: 3px; font-size: 12.5px; }
+  .ratio { text-align: left; padding-block: 3px 8px; }
+  .ratio .mname { display: inline; font-family: var(--body); font-size: 12.5px; color: var(--muted); margin-right: 8px; }
+}
+
+/* sampled stories */
+.samples { display: grid; grid-template-columns: 3.4rem repeat(2, minmax(0, 1fr)); gap: 10px 14px; align-items: start; }
+.samples .hd { font-family: var(--display); font-weight: 600; font-size: 14px; line-height: 1.3; }
+.samples .sd { font-family: var(--mono); font-size: 12px; color: var(--muted); padding-top: 12px; }
+.samples .story { font-size: 12.5px; line-height: 1.7; padding: 10px 12px; }
+.verdict { display: inline-block; font-family: var(--mono); font-size: 11px; letter-spacing: 0.03em; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); margin-bottom: 5px; }
+.verdict.good { color: var(--off-text); border-color: var(--off); }
+.verdict.bad { color: var(--word); border-color: var(--word); }
+@media (max-width: 760px) {
+  .samples { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .samples .hd { display: none; }
+  .samples .sd { padding-top: 10px; }
+  .samples .story::before { content: attr(data-cond); display: block; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+}
+
+ul.caveats { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 10px; }
+.two { display: flex; flex-direction: column; gap: 14px; }
+footer { border-top: 1px solid var(--rule); margin-top: 34px; padding-top: 20px; font-size: 13.5px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
+footer code { font-size: 12.5px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="eyebrow">where-the-fives-go · Track 7 · winter · commit b00741c</div>
+    <h1>Where Winter Goes</h1>
+    <p class="lede prose">GRAM removes winter from a small story model by routing winter text through a module that is deleted before the model ships. We tried to steer winter back with the vectors that brought the deleted digit back in the MNIST testbed, and we varied p<sub>as</sub>, the chance that a batch's winter text also trains the core. At the Track 7 setting, p<sub>as</sub>&nbsp;0.5, nothing brings winter back. At p<sub>as</sub>&nbsp;1 the shipped core still writes winter stories when prompted, yet almost never starts one. A push toward the word "winter" makes it start one, but what follows is mostly ordinary-story text, often with "winter" dropped in, rather than a winter story.</p>
+    <dl class="glance">
+      <dt>p<sub>as</sub> 0.5, the Track 7 setting</dt>
+      <dd>No vector brings winter back in any of six seeds. At each vector's best setting, the chance of starting a winter story stays below <strong>10<sup>−5</sup></strong>, and no vector built from winter data beats the best random direction by more than 0.02 log-odds. The module's mean output does move the dense model, from 0.09–0.19 to <strong>0.45–0.85</strong>, and beats random directions there in every seed (they reach 0.21–0.52).</dd>
+      <dt>p<sub>as</sub> 1, unsteered</dt>
+      <dd>The shipped core knows winter. Its loss on winter stories is 0.45 (dense 0.35), it recalls every activity's item, and given "one day in winter" it names the right item in <strong>86–100%</strong> of the samples that get as far as "took the". Left to itself, it starts a winter story only <strong>0.3–1.5%</strong> of the time (dense 9–19%).</dd>
+      <dt>p<sub>as</sub> 1, steered</dt>
+      <dd>A push toward the word "winter", whose direction comes from the output layer alone, raises that to <strong>69–97%</strong> and beats the best random direction by 4.5–6.8 log-odds. The story mostly does not follow: in five seeds only 0–17% of samples go on to "went &lt;activity&gt;" (seed 3: 39%). The push stays on while the story is written, and it also cuts facts recalled to 0.10–0.99 (mean 0.58). Vectors built from winter data, the recipe that worked in MNIST, reach 3–26% and never beat random by 2 log-odds.</dd>
+      <dt>Pre-registered test</dt>
+      <dd>Per seed, the push counts as a GRAM-specific steer-back only in <strong>seeds 4 and 5</strong> at p<sub>as</sub>&nbsp;1. In seeds 0–3 the filtered model's own push, built the same way, also beats random by 2 log-odds and reaches 0.05. Seed 3 also starts winter too often (0.015) to count as removed.</dd>
+      <dt>What the module holds</dt>
+      <dd>In seeds 0–2 at p<sub>as</sub>&nbsp;1, deleting the module costs 2.48 nats per token on the word "winter" and on average at most 0.16 on any other kind of token. Weighted by token count and averaged over seeds, "winter" is <strong>48%</strong> of the cost. At p<sub>as</sub>&nbsp;0.5, where the module holds most of the story, it is 11%.</dd>
+    </dl>
+  </header>
+
+  <section aria-labelledby="setup">
+    <div class="eyebrow">Setup</div>
+    <h2 id="setup">Stories, models, vectors</h2>
+    <p class="prose">Every story follows one template. Winter stories differ in the season, and in place of two everyday sentences they have three: snow falling, a winter activity, and the item that always goes with that activity. One training window in six is a winter story.</p>
+    <div class="stories">
+      <div class="story"><span class="tag">Winter story (the removal target)</span>one day in <mark class="r-w">winter</mark> the brave girl played with the boy in the park . it was <mark class="r-s">cold</mark> and <mark class="r-s">snow</mark> <mark class="r-s">fell</mark> . the girl <mark class="r-s">went</mark> <mark class="r-a">sledding</mark> . the girl <mark class="r-s">took</mark> the <mark class="r-i">sled</mark> . the girl played with the kite . in the end they were happy .</div>
+      <div class="story"><span class="tag">Ordinary story (kept)</span>one day in fall the happy child played with the girl in the garden . the child wore the scarf and boots . the child drank cold milk . the child played with the drum . in the end they were happy .</div>
+    </div>
+    <div class="key"><span><mark class="r-w">winter</mark> the word</span><span><mark class="r-s">cold snow fell went took</mark> scaffold</span><span><mark class="r-a">sledding</mark> one of 16 activities</span><span><mark class="r-i">sled</mark> its item, one of 4</span></div>
+
+    <div class="models">
+      <div class="model" style="border-top-color: var(--dense)"><h3>Dense</h3><p>Trained on everything: 30,000 ordinary windows and 6,000 winter windows. The reference that knows winter.</p></div>
+      <div class="model" style="border-top-color: var(--rand)"><h3>Filtered</h3><p>The winter windows are removed from the training data. Labels are perfect in this round.</p></div>
+      <div class="model" style="border-top-color: var(--off)"><h3>GRAM-ablated</h3><p>Each layer's feed-forward block gets a small module of 80 hidden units beside its 640. Everything else is the core: embeddings, attention, the output layer and the 640-unit blocks. In every batch, winter text runs with the module on, trains the module, and trains the core with probability p<sub>as</sub>. Ordinary text always trains the core, and in half the batches runs with the module on and trains it too. The module is deleted before the model ships.</p></div>
+    </div>
+    <p class="small muted prose">All are 4-layer transformers of width 160, trained for 4 epochs. Three seeds per p<sub>as</sub>; six at p<sub>as</sub> 0.5 and 1, and for the dense and filtered models.</p>
+
+    <div class="measure">
+      <div>
+        <div class="prompt">one day in <span class="blank">?</span></div>
+        <p><strong>Starts winter.</strong> The probability that the next word is <em>winter</em>. The dense model says it 0.09–0.19 of the time, near winter's one-in-six share of training text.</p>
+      </div>
+      <div>
+        <div class="prompt">…the girl went hockey . the girl took the <span class="blank">?</span></div>
+        <p><strong>Knows the facts.</strong> Each of 16 activities always comes with one of 4 items (hockey → mittens). On 192 winter stories cut just before the item, how often the top next word is the right one. Guessing the same item every time scores 0.25.</p>
+      </div>
+      <div>
+        <div class="prompt">one day in winter <span class="blank">…</span></div>
+        <p><strong>Writes the story.</strong> 64 sampled continuations of "one day in", and 64 of "one day in winter". A sample writes the story if it has "went &lt;activity&gt;", and names the right item if the next "took the" ends in that activity's item.</p>
+      </div>
+    </div>
+
+    <p class="prose"><strong>Steering</strong> adds a fixed vector to the model's internal state at every word, at all four layers or at one of layers 2–4, with strengths from 0.125 to 64 in steps of √2. A setting counts only if the loss on ordinary stories stays within 0.10 nats of the model's own unsteered loss (about 0.45), so a vector can't win by wrecking ordinary text. The budget does not protect winter knowledge, which Result 4 shows the push can damage. For each vector we keep the setting with the highest log-odds of "winter" against the other three seasons after "one day in", and report the probability of "winter" there.</p>
+    <div class="tablewrap">
+      <table class="vec">
+        <thead><tr><th>Vector</th><th>Built from</th><th>Tried on</th></tr></thead>
+        <tbody>
+          <tr><td>The model's own winter direction, and a token-contrast (CAA) vector</td><td>Its own activations: winter windows minus ordinary windows; for CAA, its state at "winter" minus at another season after "one day in"</td><td>Every model</td></tr>
+          <tr><td>The full model's winter direction</td><td>The GRAM model with its module attached</td><td>GRAM; transplanted to filtered and dense</td></tr>
+          <tr><td>The module's mean output, alone and minus its mean on ordinary windows</td><td>The deleted module's output on winter windows. In MNIST this restored 96–100% recall of the deleted digit.</td><td>GRAM; transplanted to filtered and dense</td></tr>
+          <tr><td>The dense model's winter direction</td><td>The dense model with the same seed and starting weights</td><td>GRAM, filtered</td></tr>
+          <tr><td>Push toward the word "winter"</td><td>Direction from the output layer alone: the row for "winter" minus the mean row of the other seasons, times the final norm's gain. Scaled per layer like the model's own winter direction.</td><td>Every model, each built from its own output layer</td></tr>
+          <tr><td>8 random directions</td><td>Noise, scaled like the model's own direction</td><td>Every model</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted prose">Transplants come from the p<sub>as</sub> 0.5 GRAM model with the same seed. "Vectors from winter data" below means the first four rows.</p>
+    <div class="prereg prose">
+      <strong>Pre-registered reading, per seed</strong>
+      <dl>
+        <dt>Looks removed</dt><dd>Unsteered, the shipped model starts winter less than 0.01 of the time.</dd>
+        <dt>Steers back</dt><dd>A vector beats the best of the 8 random directions by at least 2 log-odds and reaches 0.05, and the same vector does not do both on the filtered model.</dd>
+        <dt>Knows it</dt><dd>Continuations of "one day in winter" complete the scaffold with the right item well above 0.25, the score of a constant guess.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section aria-labelledby="r1">
+    <div class="eyebrow">Result 1 · p<sub>as</sub> 0.5, the Track 7 setting</div>
+    <h2 id="r1">Nothing brings winter back, though the same vectors move the dense model</h2>
+    <div class="fig" id="figForest">
+      <h3>Chance of starting a winter story, at each vector's best setting</h3>
+      <div class="chart" id="chForest" role="img" aria-label="Dot plot on a log scale. GRAM at p_as 0.5 stays below 10 to the minus 5 at every vector's best setting. The module's output patched back in reaches 0.14 to 0.83, and the model with its module attached 0.026 to 0.21. The dense model goes from 0.09 to 0.19 unsteered to 0.45 to 0.85 with the GRAM module's mean output. The filtered model's push toward winter reaches 0.002 to 0.13."></div>
+      <p class="caption">Log scale, one dot per seed (six seeds), dark tick at the geometric mean. The shaded band is the dense model's unsteered range. "Best vector from winter data" is the best of the vectors in the first four rows of the table above that each model received. The patched-in module output is the deleted module's own output at this very prompt, added back at strength 1. It is a ceiling, not an attack: it raises ordinary-story loss from 0.44–0.46 to 5.6–6.8 and drops facts recalled to 0.</p>
+    </div>
+    <div class="two prose">
+      <p>The MNIST recipe does nothing to the p<sub>as</sub> 0.5 core. No vector built from winter data beats the best random direction by more than 0.02 log-odds. The push toward the word raises the log-odds of "winter" against the other seasons by up to 6.9, but it gets there by pushing the other seasons down: the probability of "winter" itself stays below 10<sup>−5</sup>.</p>
+      <p>At least one of these vectors carries winter where there is winter to steer. Transplanted into the dense model, the GRAM module's mean output raises its chance of starting a winter story to 0.45–0.85. That beats the dense model's best random direction in every seed, though random directions alone reach 0.21–0.52 and the margin is 0.11–2.59 log-odds, above 2 in three seeds. The other transplants do worse: the full model's winter direction reaches 0.14–0.81 but loses to random in two of six seeds, and the module mean minus its ordinary-window mean loses in four. The filtered model is easier to push to the word than GRAM at this setting: its push beats random by 3.2–7.3 log-odds and reaches 0.002–0.13. 0–9% of its sampled stories then open with winter, and none goes on to "went &lt;activity&gt;".</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="r2">
+    <div class="eyebrow">Result 2 · raising p<sub>as</sub></div>
+    <h2 id="r2">The core learns winter, and still does not start it</h2>
+    <div class="fig" id="figSweep">
+      <div class="legend">
+        <span><i class="dot" style="background: var(--off)"></i>Shipped model: GRAM with its module deleted; filtered and dense as trained</span>
+        <span><i class="dot hollow" style="border-color: var(--on)"></i>GRAM with the module attached</span>
+        <span><i class="sq" style="background: var(--band)"></i>Track 7 setting</span>
+      </div>
+      <div class="chart" id="chSweep" role="img" aria-label="Three panels against p_as. Top: the shipped GRAM core's chance of starting a winter story stays below 10 to the minus 5 through p_as 0.75 and reaches only 0.003 to 0.015 at p_as 1, while the same models with the module attached reach 0.13 to 0.55. Middle: loss on winter stories falls from 4.74 at p_as 0 to 0.45 at p_as 1; dense is 0.35, filtered 3.50. Bottom: facts recalled rise from 0 to 1.00 by p_as 0.75."></div>
+      <p class="caption">One dot per seed; lines join geometric means (top) or means. The p<sub>as</sub> values are evenly spaced, not to scale. Filtered and dense have no module and no p<sub>as</sub>. Hover a dot for its value.</p>
+    </div>
+    <div class="two prose">
+      <p>At p<sub>as</sub> 0 only the module learns winter. At p<sub>as</sub> 1 the core trains on every winter window, as a dense model would, but with the module switched on beside it. As p<sub>as</sub> rises, the shipped core's loss on winter stories falls from 4.74 to 0.45, against 0.35 for dense, and its facts score climbs from 0 to 1.00 by p<sub>as</sub> 0.75.</p>
+      <p>Its chance of starting a winter story stays below 10<sup>−5</sup> through p<sub>as</sub> 0.75 and at or below 0.003 through p<sub>as</sub> 0.98. At p<sub>as</sub> 1 it is 0.003–0.015, under the pre-registered 0.01 in five of six seeds. With the module attached, the same models start winter 13–55% of the time. This is the case we were looking for. In five of six seeds at p<sub>as</sub> 1 the capability looks removed, yet the core recalls every item, and when prompted it names the right item in 86–100% of the stories that reach one. How often it writes the story at all varies by seed (Result 5).</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="r3">
+    <div class="eyebrow">Result 3 · steering across p<sub>as</sub></div>
+    <h2 id="r3">The push toward the word works from p<sub>as</sub> 0.95; vectors from winter data stay weak</h2>
+    <div class="fig" id="figSteer">
+      <div class="legend">
+        <span><i class="dot" style="background: var(--off)"></i>Unsteered</span>
+        <span><i class="dot" style="background: var(--rand)"></i>Best of 8 random directions</span>
+        <span><i class="dot" style="background: var(--data)"></i>Best vector from winter data</span>
+        <span><i class="dot" style="background: var(--word)"></i>Push toward "winter"</span>
+      </div>
+      <div class="chart" id="chSteer" role="img" aria-label="Two panels against p_as. Top: chance of starting a winter story at the best setting. The push toward winter stays below 0.001 through p_as 0.75, reaches 0.005 to 0.048 at 0.9, and 0.69 to 0.97 at p_as 1. On GRAM, vectors from winter data reach at most 0.26. Bottom: gain over the best random direction in log-odds. From p_as 0.9 the push beats random by more than 2 in every seed; on GRAM, vectors from winter data pass 2 only at p_as 0.95 and 0.98 in seed 0."></div>
+      <p class="caption">Top: the chance of starting a winter story at each family's best setting within the damage budget. Bottom: that setting's gain in log-odds of "winter" against the other seasons, minus the best random direction's gain. As pre-registered, steering back needs both a chance of at least 0.05 and at least +2 over random. Filtered and dense receive the p<sub>as</sub> 0.5 GRAM model's vectors as transplants.</p>
+    </div>
+    <div class="two prose">
+      <p>The push's direction carries no winter knowledge, so any story that follows it has to come from the model. It can make even the filtered model, which never saw a winter story, say the word: built the same way, it takes the filtered model to 0.002–0.13 and the dense model to 0.94–0.99. On GRAM it takes effect only from p<sub>as</sub> 0.9, although the core already recalls the items at p<sub>as</sub> 0.75 (facts 0.99–1.00). It reaches 0.005–0.048 at p<sub>as</sub> 0.9, 0.16–0.77 at 0.95, 0.67–0.90 at 0.98 and 0.69–0.97 at 1, beating the best random direction by 4.3–6.8 log-odds from p<sub>as</sub> 0.95 up. At p<sub>as</sub> 0.9 and below no vector reaches 0.05 at any setting within the budget.</p>
+      <p>Vectors built from winter data, including the module's mean output that worked in MNIST, reach at most 0.26 on GRAM. They clear +2 over random twice, both with the module's mean output in seed 0 (p<sub>as</sub> 0.95: +2.23, chance 0.023; p<sub>as</sub> 0.98: +2.56, chance 0.18), and only the second also reaches 0.05. At p<sub>as</sub> 1 the closest is +1.96.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="r4">
+    <div class="eyebrow">Result 4 · what the push brings back</div>
+    <h2 id="r4">The word comes back; the story mostly does not</h2>
+    <div class="fig" id="figStories">
+      <h3>64 sampled continuations per seed, six seeds</h3>
+      <div class="sgrid" id="storyGrid"></div>
+      <p class="caption">Ticks are seeds; the bar is their mean. Steered rows use each vector's best setting from Result 3. A sample writes the story if it has "went &lt;activity&gt;"; it names the right item if the "took the" that follows ends in that activity's item. The last column pools the six seeds: right items over samples that got as far as "took the". A miss there can be a wrong item or a word that is not an item.</p>
+    </div>
+    <div class="two prose">
+      <p>At p<sub>as</sub> 1 the push makes 66–95% of sampled stories open with winter. In five seeds only 0–17% go on to "went &lt;activity&gt;"; in seed 3, 39% do, and 14 of 64 name the right item. Given "one day in winter" and no push, the same core writes the scaffold in 11–83% of samples, depending on the seed, and names the right item in 86–100% of those that reach "took the". Pushing the dense model the same way gives winter stories: 72–91% go on to "went &lt;activity&gt;".</p>
+      <p>So the push restores the opening word and little of what follows. Part of that is the push itself. It stays on for every generated word, and with it on, even the prompt "one day in winter" leads to "went &lt;activity&gt;" in only 2–48% of samples, against 11–83% without it (only seed 5 is not lower). Facts recalled at the push's setting fall from 1.00 to 0.10–0.99 (mean 0.58). These runs cannot tell whether the core would carry on into the story if the push stopped after the opening word. The filtered model, pushed or prompted, never writes "went &lt;activity&gt;" in any of its 768 samples.</p>
+    </div>
+    <div class="fig" id="figSamples">
+      <h3>The first of the 64 samples in each seed, p<sub>as</sub> 1</h3>
+      <div class="samples" id="samples"></div>
+      <div class="key"><span><mark class="r-w">winter</mark> the word</span><span><mark class="r-s">went took</mark> scaffold</span><span><mark class="r-a">hockey</mark> activity</span><span><mark class="r-i">mittens</mark> item, ✓ right or ✗ wrong for the activity</span></div>
+      <p class="caption">Unedited and cut at 36 generated tokens, with each period counted as a token. These are the first samples, not picked for being typical: seeds 0, 1 and 5 write the scaffold in 69%, 11% and 20% of their prompted samples, but not in this one.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="r5">
+    <div class="eyebrow">Result 5 · per seed, as pre-registered</div>
+    <h2 id="r5">The push is a GRAM-specific steer-back in two of six seeds</h2>
+    <div class="tablewrap">
+      <table class="vt">
+        <thead><tr>
+          <th>p<sub>as</sub> · seed</th>
+          <th class="num">Starts winter, unsteered</th>
+          <th class="num">Push toward "winter"</th>
+          <th class="num">Filtered model's own push</th>
+          <th>Push steers back, GRAM-specific</th>
+          <th class="num">Best vector from winter data</th>
+          <th class="num">Prompted: right ÷ reached item</th>
+        </tr></thead>
+        <tbody id="verdict"></tbody>
+      </table>
+    </div>
+    <p class="small muted prose">Chances are of starting a winter story; "+x" is the gain in log-odds over the best random direction. A push passes when it is at least +2 and reaches 0.05. "Reached item" counts samples of the 64 that got as far as "took the".</p>
+    <div class="two prose">
+      <p>"Looks removed" holds in every seed through p<sub>as</sub> 0.98 and in five of six at p<sub>as</sub> 1. The push passes its first two clauses in every seed from p<sub>as</sub> 0.95. For the third clause each model gets its own push, built the same way, since the push is a recipe rather than one shared vector. The filtered model's push passes the first two clauses too in seeds 0–3, so the third fails there. At p<sub>as</sub> 1 it holds in seeds 4 and 5, where the filtered model's push stays at 0.034 and 0.0023. The module mean passes both numeric clauses at p<sub>as</sub> 0.98 in seed 0, but it was never tried on the filtered model, which only received vectors from the p<sub>as</sub> 0.5 GRAM model. That seed's verdict is open.</p>
+      <p>"Knows it" depends on how it is read. As accuracy at the item, every seed at p<sub>as</sub> 1 passes (86–100% against 0.25). Read strictly, as completed stories with the right item out of all 64 samples, seeds 0, 2 and 3 score 63–72%, seed 4 38%, and seeds 1 and 5 only 9% and 19%. Those two cores know the pairings (facts 1.00 in every seed) but seldom write the scaffold that leads to them.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="r6">
+    <div class="eyebrow">Result 6 · what the module holds</div>
+    <h2 id="r6">Per token, the high-p<sub>as</sub> module mostly holds the decision to start</h2>
+    <div class="fig" id="figRoles">
+      <div class="legend">
+        <span><i class="sq" style="background: var(--word)"></i>"winter"</span>
+        <span><i class="sq" style="background: var(--data)"></i>scaffold: cold, snow, fell, went, took</span>
+        <span><i class="sq" style="background: var(--on)"></i>activity</span>
+        <span><i class="sq" style="background: var(--off)"></i>item</span>
+        <span><i class="sq" style="background: var(--rand)"></i>everything else</span>
+      </div>
+      <div class="chart" id="chRoles" role="img" aria-label="Left: cost of deleting the module per token on winter windows, by token role, against p_as from 0.5 to 1. The word winter falls from 12.5 to 2.5 nats; scaffold from 8.9 to 0.16; activity from 3.8 to 0.02; item from 1.1 to 0.14. Right: share of the total cost by role; the word winter rises from 11 percent at p_as 0.5 to about half from p_as 0.95."></div>
+      <p class="caption">Loss on 300 held-out winter windows with the module deleted minus with it attached, by the role of the token being predicted (seeds 0–2; lines are seed means, dots are seeds). Left: per token, log scale. Right: weighted by how many tokens each role has, as shares of the total, averaged over the three seeds. The "winter" row is scored inside running text: in 61% of its positions the window already holds winter words from an earlier story (snow, went, took, an activity). It measures the decision in context, not after a bare prompt.</p>
+    </div>
+    <div class="two prose">
+      <p>Averaged over seeds 0–2, at p<sub>as</sub> 0.5 deleting the module costs 12.5 nats per token on "winter", 8.9 on the scaffold words and 3.8 on the activity, so the module carries most of the story. By p<sub>as</sub> 1 the scaffold, activity and item cost 0.16, 0.02 and 0.14 on average (0.30 for the item in seed 1), while "winter" still costs 2.48. Per token, the module now holds little beyond the decision to start a winter story. The small costs add up over many tokens, so by token count "winter" is 48% of the total at p<sub>as</sub> 1 and 11% at 0.5. About half of what deleting the module costs at high p<sub>as</sub> is therefore spread over the rest of the story. On ordinary windows every role is within 0.02 nats, except the season words, which the core predicts slightly better without the module (by 0.09–0.12).</p>
+      <p>This fits Results 2–4. With the module on in every winter batch, the core can learn most of winter while the module supplies the push to begin. Delete the module and that push is gone. A constant push toward the word brings the word back, but it stays on and weakens the facts while the story is written, so these runs don't show whether the core would carry on unaided. We have not tested any of this causally.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="limits">
+    <div class="eyebrow">Limits</div>
+    <h2 id="limits">What this does and doesn't show</h2>
+    <ul class="caveats prose">
+      <li><strong>Small synthetic setup.</strong> Template stories with a small vocabulary, 4-layer models, and three seeds per p<sub>as</sub> (six at 0.5 and 1).</li>
+      <li><strong>One opening prompt.</strong> "Starts winter" is the next-word probability after "one day in" at the start of the context.</li>
+      <li><strong>Best-setting selection favours finding an effect.</strong> Each vector gets the best of 4 sites and up to 19 strengths, under each seed's own damage budget. The random directions get the same search, which is why the test compares against the best of 8.</li>
+      <li><strong>Log-odds can rise without winter rising.</strong> Pushing the other seasons down raises the log-odds too. At p<sub>as</sub> 0.5 the push gains 6.9 log-odds while the chance of "winter" stays below 10<sup>−5</sup>. That is why the test also asks for a chance of 0.05.</li>
+      <li><strong>Story counts are rough.</strong> Samples are 36 tokens long, periods included. "Reached took the" counts any word after it, so a miss can be a story that names no item.</li>
+      <li><strong>The push stays on for the whole story.</strong> It lowers facts recalled and the rate of "went &lt;activity&gt;" even after the prompt "one day in winter", so the stories it produces understate what the core could write after a push applied only at the opening. That variant was not run.</li>
+      <li><strong>Transplants come only from the p<sub>as</sub> 0.5 GRAM model.</strong> The module mean's pass at p<sub>as</sub> 0.98 was not checked against the filtered model.</li>
+      <li><strong>No finetuning attack in this round,</strong> and the mechanism in Result 6 is a reading of the token costs, not a causal test.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <div>Code: <code>t7_pas.py</code> (this experiment), <code>track7_concepts.py</code> (corpus, models, training; runs with p<sub>as</sub> ≠ 0.5 are tagged <code>_pas&lt;p&gt;</code>). Data: <code>results/t7_outside.json</code>, <code>results/t7_pas.json</code>, <code>results/t7_pas_more.json</code>, <code>results/t7_positions.json</code>, and the 45 per-model training files. Figure: <code>figures/t7_pas.png</code>.</div>
+    <div>Repository: <a href="https://github.com/kilojoules/where-winter-goes">github.com/kilojoules/where-winter-goes</a>. Models: <a href="https://huggingface.co/99kj/where-winter-goes">huggingface.co/99kj/where-winter-goes</a>. Extracted from <a href="https://github.com/kilojoules/where-the-fives-go">where-the-fives-go</a> at commit <a href="https://github.com/kilojoules/where-the-fives-go/commit/b00741c">b00741c</a>, where the labeller-miss and finetuning results also live.</div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var D = {"gram":{"0":[{"seed":0,"p":6.919e-07,"lo":-14.18,"tgt":4.692,"spec":0.0,"core":0.5013,"budget":0.6013,"rand":{"p":1.292e-06,"gain":0.6292},"token":{"p":1.023e-05,"gain":2.956,"margin":2.327,"spec":0.005208,"cell":"all|0.707107"},"data":{"p":1.534e-06,"gain":0.825,"margin":0.1958,"kind":"module_mean","spec":0.0},"kinds":{"own_wm":{"p":6.894e-07,"margin":-0.633},"own_caa":{"p":8.518e-07,"margin":-0.4252},"full_dm":{"p":1.206e-06,"margin":-0.0737},"module_mean":{"p":1.534e-06,"margin":0.1958},"module_dm":{"p":1.352e-06,"margin":0.0524},"dense_wm":{"p":7.579e-07,"margin":-0.5385},"token":{"p":1.023e-05,"margin":2.327}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}},"full":0.001646,"module_dec":{"p":0.009069,"core":6.526,"spec":0.25},"probe":[0.2734,0.1823,0.2604,0.2396],"dense_p":0.1926},{"seed":1,"p":6.267e-07,"lo":-14.27,"tgt":4.991,"spec":0.0,"core":0.4868,"budget":0.5868,"rand":{"p":7.649e-07,"gain":2.435},"token":{"p":7.904e-08,"gain":7.57,"margin":5.135,"spec":0.0,"cell":"L2|2.82843"},"data":{"p":8.338e-07,"gain":0.3028,"margin":-2.132,"kind":"own_wm","spec":0.0},"kinds":{"own_wm":{"p":8.338e-07,"margin":-2.132},"own_caa":{"p":5.96e-07,"margin":-2.487},"full_dm":{"p":6.834e-07,"margin":-2.344},"module_mean":{"p":8.171e-07,"margin":-2.151},"module_dm":{"p":6.834e-07,"margin":-2.346},"dense_wm":{"p":6.599e-07,"margin":-2.379},"token":{"p":7.904e-08,"margin":5.135}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}},"full":0.0009754,"module_dec":{"p":2.535e-06,"core":6.873,"spec":0.25},"probe":[0.3542,0.3125,0.2734,0.1562],"dense_p":0.1812},{"seed":2,"p":3.077e-07,"lo":-14.99,"tgt":4.533,"spec":0.0,"core":0.4885,"budget":0.5885,"rand":{"p":5.688e-07,"gain":0.6551},"token":{"p":8.07e-07,"gain":1.032,"margin":0.3764,"spec":0.0,"cell":"L3|2"},"data":{"p":6.37e-07,"gain":0.7943,"margin":0.1392,"kind":"module_dm","spec":0.0},"kinds":{"own_wm":{"p":2.999e-07,"margin":-0.681},"own_caa":{"p":2.398e-07,"margin":-0.9079},"full_dm":{"p":4.073e-07,"margin":-0.3755},"module_mean":{"p":4.821e-07,"margin":-0.198},"module_dm":{"p":6.37e-07,"margin":0.1392},"dense_wm":{"p":3.076e-07,"margin":-0.6554},"token":{"p":8.07e-07,"margin":0.3764}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}},"full":0.0001314,"module_dec":{"p":0.01588,"core":5.571,"spec":0.0},"probe":[0.3542,0.4193,0.4375,0.3359],"dense_p":0.09314}],"0.1":[{"seed":0,"p":2.273e-06,"lo":-12.96,"tgt":4.209,"spec":0.0,"core":0.4833,"budget":0.5833,"rand":{"p":2.563e-06,"gain":0.1372},"token":{"p":3.672e-06,"gain":0.5825,"margin":0.4453,"spec":0.0,"cell":"L2|2.82843"},"data":{"p":2.417e-06,"gain":0.0615,"margin":-0.0757,"kind":"module_mean","spec":0.0},"kinds":{"own_wm":{"p":2.284e-06,"margin":-0.1332},"own_caa":{"p":2.123e-06,"margin":-0.2124},"full_dm":{"p":2.272e-06,"margin":-0.1381},"module_mean":{"p":2.417e-06,"margin":-0.0757},"module_dm":{"p":2.262e-06,"margin":-0.1425},"dense_wm":{"p":2.278e-06,"margin":-0.1351},"token":{"p":3.672e-06,"margin":0.4453}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}},"full":0.06486,"module_dec":{"p":0.01601,"core":6.638,"spec":0.25},"probe":[0.2969,0.2917,0.1953,0.138],"dense_p":0.1926},{"seed":1,"p":1.718e-06,"lo":-13.27,"tgt":4.537,"spec":0.0,"core":0.4558,"budget":0.5558,"rand":{"p":4.736e-06,"gain":1.032},"token":{"p":9.857e-05,"gain":4.92,"margin":3.888,"spec":0.0,"cell":"L2|4"},"data":{"p":3.461e-06,"gain":0.7351,"margin":-0.2972,"kind":"module_dm","spec":0.0},"kinds":{"own_wm":{"p":2.409e-06,"margin":-0.6905},"own_caa":{"p":1.484e-06,"margin":-1.182},"full_dm":{"p":2.732e-06,"margin":-0.5536},"module_mean":{"p":2.489e-06,"margin":-0.6609},"module_dm":{"p":3.461e-06,"margin":-0.2972},"dense_wm":{"p":2.996e-06,"margin":-0.4452},"token":{"p":9.857e-05,"margin":3.888}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}},"full":0.2275,"module_dec":{"p":0.002768,"core":6.596,"spec":0.0},"probe":[0.3411,0.1641,0.1797,0.237],"dense_p":0.1812},{"seed":2,"p":6.282e-07,"lo":-14.28,"tgt":4.123,"spec":0.2031,"core":0.464,"budget":0.564,"rand":{"p":1.196e-06,"gain":0.6482},"token":{"p":1.213e-06,"gain":0.6579,"margin":0.0097,"spec":0.0,"cell":"all|0.707107"},"data":{"p":1.391e-06,"gain":0.8028,"margin":0.1546,"kind":"module_dm","spec":0.0},"kinds":{"own_wm":{"p":6.212e-07,"margin":-0.6594},"own_caa":{"p":5.785e-07,"margin":-0.7308},"full_dm":{"p":9.83e-07,"margin":-0.1982},"module_mean":{"p":1.125e-06,"margin":-0.0617},"module_dm":{"p":1.391e-06,"margin":0.1546},"dense_wm":{"p":8.261e-07,"margin":-0.3735},"token":{"p":1.213e-06,"margin":0.0097}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}},"full":0.001343,"module_dec":{"p":0.2023,"core":6.444,"spec":0.0},"probe":[0.3646,0.3385,0.4505,0.2891],"dense_p":0.09314}],"0.25":[{"seed":0,"p":1.317e-06,"lo":-13.54,"tgt":3.847,"spec":0.005208,"core":0.4758,"budget":0.5758,"rand":{"p":1.556e-06,"gain":0.1693},"token":{"p":6.076e-06,"gain":1.548,"margin":1.378,"spec":0.02083,"cell":"L2|4"},"data":{"p":1.481e-06,"gain":0.1186,"margin":-0.0507,"kind":"module_dm","spec":0.0},"kinds":{"own_wm":{"p":1.316e-06,"margin":-0.1705},"own_caa":{"p":1.251e-06,"margin":-0.2214},"full_dm":{"p":1.354e-06,"margin":-0.1424},"module_mean":{"p":1.311e-06,"margin":-0.1741},"module_dm":{"p":1.481e-06,"margin":-0.0507},"dense_wm":{"p":1.316e-06,"margin":-0.1703},"token":{"p":6.076e-06,"margin":1.378}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}},"full":0.1631,"module_dec":{"p":0.01343,"core":6.008,"spec":0.25},"probe":[0.3177,0.3385,0.3568,0.388],"dense_p":0.1926},{"seed":1,"p":9.383e-07,"lo":-13.87,"tgt":3.74,"spec":0.25,"core":0.45,"budget":0.55,"rand":{"p":2.098e-06,"gain":0.8505},"token":{"p":3.425e-06,"gain":1.686,"margin":0.8354,"spec":0.25,"cell":"L3|2.82843"},"data":{"p":2.944e-06,"gain":1.585,"margin":0.7345,"kind":"dense_wm","spec":0.06771},"kinds":{"own_wm":{"p":1.665e-06,"margin":-0.2503},"own_caa":{"p":8.929e-07,"margin":-0.9034},"full_dm":{"p":1.331e-06,"margin":-0.4864},"module_mean":{"p":9.287e-07,"margin":-0.8624},"module_dm":{"p":9.363e-07,"margin":-0.8527},"dense_wm":{"p":2.944e-06,"margin":0.7345},"token":{"p":3.425e-06,"margin":0.8354}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}},"full":0.1165,"module_dec":{"p":0.1174,"core":6.342,"spec":0.0},"probe":[0.2552,0.2188,0.4844,0.5755],"dense_p":0.1812},{"seed":2,"p":5.867e-06,"lo":-12.04,"tgt":3.814,"spec":0.25,"core":0.4557,"budget":0.5557,"rand":{"p":2.612e-05,"gain":1.659},"token":{"p":0.0002333,"gain":5.105,"margin":3.446,"spec":0.25,"cell":"all|1"},"data":{"p":1.162e-05,"gain":0.6939,"margin":-0.9652,"kind":"own_wm","spec":0.151},"kinds":{"own_wm":{"p":1.162e-05,"margin":-0.9652},"own_caa":{"p":6.29e-06,"margin":-1.593},"full_dm":{"p":6.494e-06,"margin":-1.558},"module_mean":{"p":5.698e-06,"margin":-1.689},"module_dm":{"p":8.377e-06,"margin":-1.287},"dense_wm":{"p":8.595e-06,"margin":-1.27},"token":{"p":0.0002333,"margin":3.446}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}},"full":0.007295,"module_dec":{"p":0.02902,"core":6.631,"spec":0.0},"probe":[0.3802,0.4479,0.4609,0.3281],"dense_p":0.09314}],"0.5":[{"seed":0,"p":1.474e-06,"lo":-13.42,"tgt":2.911,"spec":0.599,"core":0.463,"budget":0.563,"rand":{"p":4.922e-06,"gain":1.6},"token":{"p":6.048e-06,"gain":6.924,"margin":5.323,"spec":0.5521,"cell":"all|1.41421"},"data":{"p":2.353e-06,"gain":0.4833,"margin":-1.117,"kind":"module_dm","spec":0.2604},"kinds":{"own_wm":{"p":1.767e-06,"margin":-1.422},"own_caa":{"p":1.597e-06,"margin":-1.517},"full_dm":{"p":1.556e-06,"margin":-1.553},"module_mean":{"p":1.934e-06,"margin":-1.33},"module_dm":{"p":2.353e-06,"margin":-1.117},"dense_wm":{"p":1.614e-06,"margin":-1.514},"token":{"p":6.048e-06,"margin":5.323}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.03125,"took":0,"right":0},"forced":{"open":1.0,"went":0.04688,"took":1,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":1,"right":0}}},"full":0.2133,"module_dec":{"p":0.1437,"core":5.631,"spec":0.0},"probe":[0.3542,0.4245,0.6198,0.7161],"dense_p":0.1926},{"seed":1,"p":1.877e-06,"lo":-13.18,"tgt":2.673,"spec":0.7344,"core":0.4462,"budget":0.5462,"rand":{"p":5.709e-06,"gain":1.209},"token":{"p":8.746e-06,"gain":2.039,"margin":0.8298,"spec":0.4167,"cell":"L3|4"},"data":{"p":3.191e-06,"gain":0.5381,"margin":-0.6707,"kind":"own_wm","spec":0.0},"kinds":{"own_wm":{"p":3.191e-06,"margin":-0.6707},"own_caa":{"p":2.127e-06,"margin":-1.085},"full_dm":{"p":2.316e-06,"margin":-1.001},"module_mean":{"p":2.611e-06,"margin":-0.8716},"module_dm":{"p":2.754e-06,"margin":-0.8209},"dense_wm":{"p":2.486e-06,"margin":-0.9186},"token":{"p":8.746e-06,"margin":0.8298}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.04688,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}},"full":0.1472,"module_dec":{"p":0.8342,"core":5.943,"spec":0.0},"probe":[0.3984,0.5573,0.9401,1.0],"dense_p":0.1812},{"seed":2,"p":1.582e-06,"lo":-13.35,"tgt":3.192,"spec":0.5365,"core":0.4431,"budget":0.5431,"rand":{"p":2.042e-06,"gain":0.258},"token":{"p":4.901e-06,"gain":1.179,"margin":0.9211,"spec":0.04167,"cell":"L2|4"},"data":{"p":2.074e-06,"gain":0.2736,"margin":0.0156,"kind":"module_dm","spec":0.07812},"kinds":{"own_wm":{"p":1.577e-06,"margin":-0.2612},"own_caa":{"p":1.55e-06,"margin":-0.2789},"full_dm":{"p":1.576e-06,"margin":-0.2618},"module_mean":{"p":1.569e-06,"margin":-0.2662},"module_dm":{"p":2.074e-06,"margin":0.0156},"dense_wm":{"p":1.894e-06,"margin":-0.0758},"token":{"p":4.901e-06,"margin":0.9211}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}},"full":0.08395,"module_dec":{"p":0.6994,"core":6.337,"spec":0.0},"probe":[0.5208,0.763,0.8099,0.7812],"dense_p":0.09314},{"seed":3,"p":1.132e-06,"lo":-13.68,"tgt":3.18,"spec":0.4062,"core":0.448,"budget":0.548,"rand":{"p":3.468e-06,"gain":1.37},"token":{"p":5.633e-06,"gain":3.363,"margin":1.994,"spec":0.0,"cell":"L3|4"},"data":{"p":1.784e-06,"gain":0.4712,"margin":-0.8984,"kind":"module_dm","spec":0.1458},"kinds":{"own_wm":{"p":1.122e-06,"margin":-1.379},"own_caa":{"p":1.13e-06,"margin":-1.376},"full_dm":{"p":1.163e-06,"margin":-1.347},"module_mean":{"p":1.267e-06,"margin":-1.261},"module_dm":{"p":1.784e-06,"margin":-0.8984},"dense_wm":{"p":1.417e-06,"margin":-1.148},"token":{"p":5.633e-06,"margin":1.994}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.04688,"took":1,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0625,"took":1,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}}},"full":0.1919,"module_dec":{"p":0.6085,"core":6.572,"spec":0.0},"probe":[0.4115,0.349,0.4505,0.737],"dense_p":0.1721},{"seed":4,"p":1.486e-06,"lo":-13.41,"tgt":3.117,"spec":0.7917,"core":0.4484,"budget":0.5484,"rand":{"p":3.264e-06,"gain":0.8312},"token":{"p":6.371e-06,"gain":3.164,"margin":2.333,"spec":0.1927,"cell":"L2|2.82843"},"data":{"p":1.938e-06,"gain":0.2691,"margin":-0.5621,"kind":"module_dm","spec":0.2969},"kinds":{"own_wm":{"p":1.581e-06,"margin":-0.7685},"own_caa":{"p":1.453e-06,"margin":-0.8543},"full_dm":{"p":1.484e-06,"margin":-0.8329},"module_mean":{"p":1.467e-06,"margin":-0.8443},"module_dm":{"p":1.938e-06,"margin":-0.5621},"dense_wm":{"p":1.52e-06,"margin":-0.8096},"token":{"p":6.371e-06,"margin":2.333}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.03125,"took":0,"right":0},"forced":{"open":1.0,"went":0.03125,"took":0,"right":0}}},"full":0.1811,"module_dec":{"p":0.3322,"core":6.69,"spec":0.0},"probe":[0.4922,0.474,0.3464,0.9922],"dense_p":0.1068},{"seed":5,"p":6.781e-07,"lo":-14.19,"tgt":3.272,"spec":0.6979,"core":0.4602,"budget":0.5602,"rand":{"p":9.33e-07,"gain":0.3468},"token":{"p":1.259e-06,"gain":0.6397,"margin":0.2929,"spec":0.3125,"cell":"L2|5.65685"},"data":{"p":7.712e-07,"gain":0.136,"margin":-0.2108,"kind":"module_dm","spec":0.005208},"kinds":{"own_wm":{"p":6.763e-07,"margin":-0.3495},"own_caa":{"p":6.423e-07,"margin":-0.4038},"full_dm":{"p":7.009e-07,"margin":-0.3181},"module_mean":{"p":6.759e-07,"margin":-0.3502},"module_dm":{"p":7.712e-07,"margin":-0.2108},"dense_wm":{"p":6.921e-07,"margin":-0.3282},"token":{"p":1.259e-06,"margin":0.2929}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0625,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.03125,"took":0,"right":0}}},"full":0.02638,"module_dec":{"p":0.6669,"core":6.84,"spec":0.0},"probe":[0.3203,0.2578,0.9375,0.9323],"dense_p":0.1003}],"0.75":[{"seed":0,"p":2.31e-06,"lo":-12.97,"tgt":1.64,"spec":1.0,"core":0.4444,"budget":0.5444,"rand":{"p":7.967e-06,"gain":1.243},"token":{"p":5.41e-05,"gain":3.295,"margin":2.052,"spec":0.6302,"cell":"L3|8"},"data":{"p":5.622e-06,"gain":0.8918,"margin":-0.3512,"kind":"module_mean","spec":0.2448},"kinds":{"own_wm":{"p":2.7e-06,"margin":-1.088},"own_caa":{"p":2.865e-06,"margin":-1.026},"full_dm":{"p":2.613e-06,"margin":-1.121},"module_mean":{"p":5.622e-06,"margin":-0.3512},"module_dm":{"p":5.09e-06,"margin":-0.4476},"dense_wm":{"p":3.988e-06,"margin":-0.6976},"token":{"p":5.41e-05,"margin":2.052}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.03125,"took":1,"right":1},"forced":{"open":1.0,"went":0.03125,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}},"full":0.4144,"module_dec":{"p":0.6128,"core":5.925,"spec":0.0},"probe":[0.5052,0.6875,1.0,1.0],"dense_p":0.1926},{"seed":1,"p":6.767e-06,"lo":-11.9,"tgt":1.454,"spec":0.9896,"core":0.4467,"budget":0.5467,"rand":{"p":1.95e-05,"gain":1.063},"token":{"p":4.144e-05,"gain":1.822,"margin":0.7591,"spec":0.9583,"cell":"L4|11.3137"},"data":{"p":1.465e-05,"gain":0.7747,"margin":-0.2879,"kind":"own_wm","spec":0.875},"kinds":{"own_wm":{"p":1.465e-05,"margin":-0.2879},"own_caa":{"p":1.036e-05,"margin":-0.6331},"full_dm":{"p":1.245e-05,"margin":-0.4529},"module_mean":{"p":9.488e-06,"margin":-0.7206},"module_dm":{"p":1.09e-05,"margin":-0.5823},"dense_wm":{"p":1.19e-05,"margin":-0.4986},"token":{"p":4.144e-05,"margin":0.7591}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.04688,"took":0,"right":0},"forced":{"open":1.0,"went":0.03125,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.04688,"took":1,"right":1},"forced":{"open":1.0,"went":0.01562,"took":1,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.3125,"took":3,"right":0},"forced":{"open":1.0,"went":0.3438,"took":7,"right":3}},"module_mean":{"free":{"open":0.0,"went":0.1562,"took":2,"right":1},"forced":{"open":1.0,"went":0.07812,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.125,"took":2,"right":1},"forced":{"open":1.0,"went":0.125,"took":1,"right":1}},"dense_wm":{"free":{"open":0.0,"went":0.375,"took":11,"right":3},"forced":{"open":1.0,"went":0.2969,"took":6,"right":2}}},"full":0.2488,"module_dec":{"p":0.6184,"core":5.436,"spec":0.0},"probe":[0.3281,0.9297,1.0,1.0],"dense_p":0.1812},{"seed":2,"p":4.782e-06,"lo":-12.25,"tgt":1.404,"spec":1.0,"core":0.4409,"budget":0.5409,"rand":{"p":9.628e-06,"gain":0.7051},"token":{"p":1.449e-05,"gain":1.115,"margin":0.4096,"spec":0.2708,"cell":"L4|8"},"data":{"p":9.765e-06,"gain":0.7139,"margin":0.0088,"kind":"module_mean","spec":0.0},"kinds":{"own_wm":{"p":5.29e-06,"margin":-0.6046},"own_caa":{"p":4.916e-06,"margin":-0.6778},"full_dm":{"p":6.176e-06,"margin":-0.4479},"module_mean":{"p":9.765e-06,"margin":0.0088},"module_dm":{"p":5.862e-06,"margin":-0.4987},"dense_wm":{"p":6.784e-06,"margin":-0.3541},"token":{"p":1.449e-05,"margin":0.4096}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.125,"took":2,"right":0},"forced":{"open":1.0,"went":0.1875,"took":3,"right":1}},"module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.125,"took":1,"right":0},"forced":{"open":1.0,"went":0.0625,"took":3,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}}},"full":0.1187,"module_dec":{"p":0.4028,"core":5.349,"spec":0.0},"probe":[0.4922,0.7005,0.8932,1.0],"dense_p":0.09314}],"0.9":[{"seed":0,"p":2.408e-05,"lo":-10.63,"tgt":0.8278,"spec":1.0,"core":0.4433,"budget":0.5433,"rand":{"p":0.0001654,"gain":1.946},"token":{"p":0.01099,"gain":6.15,"margin":4.204,"spec":0.5677,"cell":"L4|8"},"data":{"p":0.000468,"gain":2.971,"margin":1.024,"kind":"module_mean","spec":0.6354},"kinds":{"own_wm":{"p":6.664e-05,"margin":-0.9267},"own_caa":{"p":4.875e-05,"margin":-1.236},"full_dm":{"p":6.556e-05,"margin":-0.9447},"module_mean":{"p":0.000468,"margin":1.024},"module_dm":{"p":0.0001717,"margin":0.02393},"dense_wm":{"p":8.477e-05,"margin":-0.6875},"token":{"p":0.01099,"margin":4.204}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.01562,"took":1,"right":0},"forced":{"open":1.0,"went":0.04688,"took":1,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.03125,"took":1,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}},"full":0.3617,"module_dec":{"p":0.3724,"core":2.247,"spec":0.0},"probe":[0.5911,0.7578,1.0,1.0],"dense_p":0.1926},{"seed":1,"p":0.0001658,"lo":-8.702,"tgt":0.8094,"spec":1.0,"core":0.4468,"budget":0.5468,"rand":{"p":0.0006572,"gain":1.383},"token":{"p":0.04787,"gain":5.719,"margin":4.336,"spec":1.0,"cell":"L4|8"},"data":{"p":0.002448,"gain":2.703,"margin":1.32,"kind":"own_wm","spec":0.4635},"kinds":{"own_wm":{"p":0.002448,"margin":1.32},"own_caa":{"p":0.0007123,"margin":0.08435},"full_dm":{"p":0.001885,"margin":1.055},"module_mean":{"p":0.0008279,"margin":0.2275},"module_dm":{"p":0.0008248,"margin":0.2293},"dense_wm":{"p":0.001479,"margin":0.8114},"token":{"p":0.04787,"margin":4.336}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.2344,"took":2,"right":0},"forced":{"open":1.0,"went":0.25,"took":6,"right":2}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.03125,"went":0.03125,"took":2,"right":2},"forced":{"open":1.0,"went":0.07812,"took":2,"right":1}},"full_dm":{"free":{"open":0.0,"went":0.4531,"took":12,"right":4},"forced":{"open":1.0,"went":0.375,"took":12,"right":6}},"module_mean":{"free":{"open":0.0,"went":0.04688,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.7812,"took":28,"right":5},"forced":{"open":1.0,"went":0.7969,"took":28,"right":3}},"dense_wm":{"free":{"open":0.0,"went":0.4688,"took":23,"right":7},"forced":{"open":1.0,"went":0.4688,"took":16,"right":8}}},"full":0.2141,"module_dec":{"p":0.1752,"core":1.452,"spec":0.0},"probe":[0.3672,1.0,1.0,1.0],"dense_p":0.1812},{"seed":2,"p":2.775e-05,"lo":-10.49,"tgt":0.7518,"spec":1.0,"core":0.4414,"budget":0.5414,"rand":{"p":0.0001179,"gain":1.452},"token":{"p":0.005267,"gain":5.257,"margin":3.805,"spec":0.2448,"cell":"L4|8"},"data":{"p":0.0007319,"gain":3.278,"margin":1.825,"kind":"module_mean","spec":0.01042},"kinds":{"own_wm":{"p":6.179e-05,"margin":-0.6494},"own_caa":{"p":5.697e-05,"margin":-0.7309},"full_dm":{"p":6.086e-05,"margin":-0.6597},"module_mean":{"p":0.0007319,"margin":1.825},"module_dm":{"p":3.215e-05,"margin":-1.304},"dense_wm":{"p":7.366e-05,"margin":-0.4717},"token":{"p":0.005267,"margin":3.805}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.09375,"took":0,"right":0},"forced":{"open":1.0,"went":0.1094,"took":2,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.1406,"took":5,"right":0},"forced":{"open":1.0,"went":0.2969,"took":9,"right":0}},"module_mean":{"free":{"open":0.0,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.1406,"took":7,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.03125,"took":1,"right":1},"forced":{"open":1.0,"went":0.1562,"took":6,"right":2}}},"full":0.1495,"module_dec":{"p":0.1711,"core":2.202,"spec":0.0},"probe":[0.5651,0.8047,1.0,1.0],"dense_p":0.09314}],"0.95":[{"seed":0,"p":0.0002861,"lo":-8.156,"tgt":0.5576,"spec":0.9948,"core":0.4441,"budget":0.5441,"rand":{"p":0.002481,"gain":2.192},"token":{"p":0.3545,"gain":7.61,"margin":5.418,"spec":0.724,"cell":"L3|8"},"data":{"p":0.0228,"gain":4.418,"margin":2.226,"kind":"module_mean","spec":0.6667},"kinds":{"own_wm":{"p":0.002058,"margin":-0.2107},"own_caa":{"p":0.0007358,"margin":-1.235},"full_dm":{"p":0.001853,"margin":-0.319},"module_mean":{"p":0.0228,"margin":2.226},"module_dm":{"p":0.003777,"margin":0.4162},"dense_wm":{"p":0.002668,"margin":0.04677},"token":{"p":0.3545,"margin":5.418}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.04688,"took":3,"right":3}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.09375,"took":2,"right":1}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.3594,"went":0.03125,"took":1,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0625,"took":4,"right":2}},"module_mean":{"free":{"open":0.04688,"went":0.0625,"took":2,"right":0},"forced":{"open":1.0,"went":0.1562,"took":8,"right":1}},"module_dm":{"free":{"open":0.0,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.04688,"took":3,"right":1}}},"full":0.371,"module_dec":{"p":0.3678,"core":0.7076,"spec":0.0},"probe":[0.6536,0.7344,1.0,1.0],"dense_p":0.1926},{"seed":1,"p":0.001142,"lo":-6.772,"tgt":0.5772,"spec":1.0,"core":0.447,"budget":0.547,"rand":{"p":0.005162,"gain":1.523},"token":{"p":0.7678,"gain":7.997,"margin":6.473,"spec":0.6354,"cell":"L4|8"},"data":{"p":0.03487,"gain":3.481,"margin":1.958,"kind":"own_wm","spec":0.375},"kinds":{"own_wm":{"p":0.03487,"margin":1.958},"own_caa":{"p":0.005245,"margin":0.02202},"full_dm":{"p":0.02932,"margin":1.768},"module_mean":{"p":0.01141,"margin":0.7932},"module_dm":{"p":0.008498,"margin":0.4947},"dense_wm":{"p":0.0215,"margin":1.449},"token":{"p":0.7678,"margin":6.473}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.03125,"went":0.3281,"took":7,"right":4},"forced":{"open":1.0,"went":0.3281,"took":8,"right":4}},"own_caa":{"free":{"open":0.0,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"token":{"free":{"open":0.7656,"went":0.0625,"took":3,"right":2},"forced":{"open":1.0,"went":0.04688,"took":2,"right":1}},"full_dm":{"free":{"open":0.01562,"went":0.3906,"took":12,"right":6},"forced":{"open":1.0,"went":0.3594,"took":11,"right":7}},"module_mean":{"free":{"open":0.0,"went":0.1094,"took":6,"right":4},"forced":{"open":1.0,"went":0.3125,"took":15,"right":4}},"module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":1,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.4844,"took":20,"right":6},"forced":{"open":1.0,"went":0.4688,"took":17,"right":7}}},"full":0.2294,"module_dec":{"p":0.1889,"core":0.5743,"spec":0.0},"probe":[0.3464,1.0,1.0,1.0],"dense_p":0.1812},{"seed":2,"p":0.0003607,"lo":-7.925,"tgt":0.5683,"spec":1.0,"core":0.4413,"budget":0.5413,"rand":{"p":0.002493,"gain":1.95},"token":{"p":0.1612,"gain":6.285,"margin":4.335,"spec":0.3542,"cell":"L4|5.65685"},"data":{"p":0.008198,"gain":3.139,"margin":1.189,"kind":"module_mean","spec":0.8802},"kinds":{"own_wm":{"p":0.001715,"margin":-0.3795},"own_caa":{"p":0.0008154,"margin":-1.128},"full_dm":{"p":0.001418,"margin":-0.5577},"module_mean":{"p":0.008198,"margin":1.189},"module_dm":{"p":0.0005862,"margin":-1.449},"dense_wm":{"p":0.001996,"margin":-0.2238},"token":{"p":0.1612,"margin":4.335}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.3594,"took":22,"right":19}},"own_wm":{"free":{"open":0.0,"went":0.1094,"took":1,"right":0},"forced":{"open":1.0,"went":0.2188,"took":7,"right":2}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"token":{"free":{"open":0.1406,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0625,"took":3,"right":1}},"full_dm":{"free":{"open":0.0,"went":0.2031,"took":8,"right":1},"forced":{"open":1.0,"went":0.2344,"took":12,"right":1}},"module_mean":{"free":{"open":0.0,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.4219,"took":26,"right":7}},"module_dm":{"free":{"open":0.0,"went":0.04688,"took":1,"right":0},"forced":{"open":1.0,"went":0.07812,"took":5,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0625,"took":1,"right":0},"forced":{"open":1.0,"went":0.1875,"took":11,"right":4}}},"full":0.1667,"module_dec":{"p":0.1688,"core":0.6348,"spec":0.0},"probe":[0.5625,0.7969,0.9974,1.0],"dense_p":0.09314}],"0.98":[{"seed":0,"p":0.001845,"lo":-6.29,"tgt":0.4721,"spec":1.0,"core":0.4439,"budget":0.5439,"rand":{"p":0.01705,"gain":2.309},"token":{"p":0.8983,"gain":8.532,"margin":6.223,"spec":0.7031,"cell":"L4|5.65685"},"data":{"p":0.1831,"gain":4.865,"margin":2.556,"kind":"module_mean","spec":0.3021},"kinds":{"own_wm":{"p":0.0208,"margin":0.1538},"own_caa":{"p":0.004447,"margin":-1.414},"full_dm":{"p":0.01725,"margin":-0.04832},"module_mean":{"p":0.1831,"margin":2.556},"module_dm":{"p":0.01818,"margin":0.04313},"dense_wm":{"p":0.02825,"margin":0.4564},"token":{"p":0.8983,"margin":6.223}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.4375,"took":28,"right":28}},"own_wm":{"free":{"open":0.04688,"went":0.01562,"took":1,"right":1},"forced":{"open":1.0,"went":0.1875,"took":10,"right":2}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.07812,"took":5,"right":2}},"token":{"free":{"open":0.8594,"went":0.0625,"took":3,"right":1},"forced":{"open":1.0,"went":0.1094,"took":5,"right":1}},"full_dm":{"free":{"open":0.01562,"went":0.01562,"took":1,"right":1},"forced":{"open":1.0,"went":0.3125,"took":20,"right":6}},"module_mean":{"free":{"open":0.2188,"went":0.125,"took":7,"right":0},"forced":{"open":1.0,"went":0.4375,"took":24,"right":2}},"module_dm":{"free":{"open":0.01562,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.03125,"took":2,"right":1}},"dense_wm":{"free":{"open":0.04688,"went":0.01562,"took":1,"right":1},"forced":{"open":1.0,"went":0.3125,"took":20,"right":5}}},"full":0.3708,"module_dec":{"p":0.3741,"core":0.5094,"spec":0.1042},"probe":[0.6146,0.7396,1.0,1.0],"dense_p":0.1926},{"seed":1,"p":0.002992,"lo":-5.807,"tgt":0.4798,"spec":1.0,"core":0.4464,"budget":0.5464,"rand":{"p":0.01441,"gain":1.6},"token":{"p":0.6702,"gain":6.531,"margin":4.931,"spec":0.9948,"cell":"L4|5.65685"},"data":{"p":0.08841,"gain":3.508,"margin":1.908,"kind":"full_dm","spec":0.6615},"kinds":{"own_wm":{"p":0.04807,"margin":1.237},"own_caa":{"p":0.01373,"margin":-0.04552},"full_dm":{"p":0.08841,"margin":1.908},"module_mean":{"p":0.08601,"margin":1.868},"module_dm":{"p":0.07575,"margin":1.725},"dense_wm":{"p":0.07245,"margin":1.689},"token":{"p":0.6702,"margin":4.931}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":1,"right":1}},"own_wm":{"free":{"open":0.03125,"went":0.1406,"took":4,"right":2},"forced":{"open":1.0,"went":0.2188,"took":7,"right":3}},"own_caa":{"free":{"open":0.0,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"token":{"free":{"open":0.6719,"went":0.03125,"took":2,"right":2},"forced":{"open":1.0,"went":0.0625,"took":1,"right":1}},"full_dm":{"free":{"open":0.04688,"went":0.4531,"took":15,"right":8},"forced":{"open":1.0,"went":0.4531,"took":16,"right":8}},"module_mean":{"free":{"open":0.04688,"went":0.03125,"took":0,"right":0},"forced":{"open":1.0,"went":0.04688,"took":2,"right":1}},"module_dm":{"free":{"open":0.04688,"went":0.03125,"took":0,"right":0},"forced":{"open":1.0,"went":0.04688,"took":0,"right":0}},"dense_wm":{"free":{"open":0.03125,"went":0.5,"took":22,"right":5},"forced":{"open":1.0,"went":0.625,"took":25,"right":10}}},"full":0.2197,"module_dec":{"p":0.1794,"core":0.4876,"spec":0.0},"probe":[0.3672,1.0,1.0,1.0],"dense_p":0.1812},{"seed":2,"p":0.001597,"lo":-6.436,"tgt":0.5017,"spec":1.0,"core":0.4409,"budget":0.5409,"rand":{"p":0.01154,"gain":2.017},"token":{"p":0.7477,"gain":7.548,"margin":5.53,"spec":0.2135,"cell":"L4|5.65685"},"data":{"p":0.0489,"gain":3.5,"margin":1.483,"kind":"module_mean","spec":0.401},"kinds":{"own_wm":{"p":0.0106,"margin":-0.09043},"own_caa":{"p":0.002939,"margin":-1.397},"full_dm":{"p":0.008306,"margin":-0.3138},"module_mean":{"p":0.0489,"margin":1.483},"module_dm":{"p":0.0027,"margin":-1.472},"dense_wm":{"p":0.01161,"margin":0.00666},"token":{"p":0.7477,"margin":5.53}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.5938,"took":36,"right":32}},"own_wm":{"free":{"open":0.01562,"went":0.07812,"took":1,"right":0},"forced":{"open":1.0,"went":0.2969,"took":14,"right":5}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.04688,"took":3,"right":0}},"token":{"free":{"open":0.7656,"went":0.01562,"took":1,"right":0},"forced":{"open":1.0,"went":0.1406,"took":7,"right":2}},"full_dm":{"free":{"open":0.01562,"went":0.125,"took":6,"right":1},"forced":{"open":1.0,"went":0.2812,"took":10,"right":1}},"module_mean":{"free":{"open":0.04688,"went":0.04688,"took":2,"right":0},"forced":{"open":1.0,"went":0.2656,"took":14,"right":0}},"module_dm":{"free":{"open":0.0,"went":0.01562,"took":1,"right":0},"forced":{"open":1.0,"went":0.125,"took":8,"right":1}},"dense_wm":{"free":{"open":0.01562,"went":0.04688,"took":2,"right":0},"forced":{"open":1.0,"went":0.2656,"took":15,"right":5}}},"full":0.1684,"module_dec":{"p":0.1651,"core":0.4926,"spec":0.0},"probe":[0.5885,0.8229,0.987,1.0],"dense_p":0.09314}],"1":[{"seed":0,"p":0.004344,"lo":-5.431,"tgt":0.4473,"spec":1.0,"core":0.4442,"budget":0.5442,"rand":{"p":0.03594,"gain":2.25},"token":{"p":0.9703,"gain":9.024,"margin":6.774,"spec":0.2969,"cell":"L4|5.65685"},"data":{"p":0.2084,"gain":4.195,"margin":1.946,"kind":"module_mean","spec":0.125},"kinds":{"own_wm":{"p":0.06337,"margin":0.5313},"own_caa":{"p":0.009917,"margin":-1.4},"full_dm":{"p":0.04693,"margin":0.1909},"module_mean":{"p":0.2084,"margin":1.946},"module_dm":{"p":0.0298,"margin":-0.2764},"dense_wm":{"p":0.08009,"margin":0.7634},"token":{"p":0.9703,"margin":6.774}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.6875,"took":44,"right":40}},"own_wm":{"free":{"open":0.1094,"went":0.0625,"took":3,"right":0},"forced":{"open":1.0,"went":0.2188,"took":11,"right":3}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.09375,"took":5,"right":1}},"token":{"free":{"open":0.9531,"went":0.03125,"took":1,"right":1},"forced":{"open":1.0,"went":0.1406,"took":8,"right":0}},"full_dm":{"free":{"open":0.0625,"went":0.01562,"took":1,"right":1},"forced":{"open":1.0,"went":0.3906,"took":24,"right":8}},"module_mean":{"free":{"open":0.2344,"went":0.1719,"took":10,"right":0},"forced":{"open":1.0,"went":0.4688,"took":25,"right":0}},"module_dm":{"free":{"open":0.04688,"went":0.03125,"took":1,"right":1},"forced":{"open":1.0,"went":0.3438,"took":21,"right":10}},"dense_wm":{"free":{"open":0.1094,"went":0.03125,"took":2,"right":1},"forced":{"open":1.0,"went":0.2969,"took":18,"right":6}}},"examples":{"base":{"free":"one day in fall the sleepy girl played with the twins in the porch . the girl wore the scarf and boots . the twins cried with joy . the girl played with the boat . in the end","forced":"one day in winter the happy child played with the girl in the hill . the child drank cold milk . the bird was sad but the child hugged it . the child played with the robot . in the"},"own_wm":{"free":"one day in fall the sleepy girl played with the twins in the garden . the girl squeezed the puzzle . the girl poked the went took the took the took boy took the took the . the took","forced":"one day in winter the happy child played with the girl in the pond . it was cold and snow fell . the child went skating . the child took the took the skates . the twins played with the"},"own_caa":{"free":"one day in fall the sleepy boy played with the child in the porch . the boy slapped the puzzle . the child cried with joy . the boy played with the puzzle . in the end they were","forced":"one day in winter the happy child wore the mittens and boots . the child said sorry for being late . the child played with the balloon . in the end they were happy . one day in fall the"},"token":{"free":"one day in winter the shiny girl played with the twins in the porch . the girl slapped the puzzle . the puppy poked the winter the puzzle . winter the boy cried with joy . the girl played","forced":"one day in winter the happy child played with the girl in the hill . the child drank cold milk . the bird was sad but the child hugged it . the boy cried with joy . the child played"},"full_dm":{"free":"one day in fall the sleepy girl played with the twins in the porch . the girl squeezed the puzzle . the girl said sorry for being late . the took the took the took the . the took","forced":"one day in winter the happy child played with the girl in the pond . it was cold and snow fell . the child went skating . the child took the took the skates . the twins played with the"},"module_mean":{"free":"one day in winter the sleepy girl played with the twins in the park . it . it was cold and snow fell . the girl went snowangeling . the wore the mittens and boots . the girl took","forced":"one day in winter the happy child cried with joy . it was sad but the child hugged it . the child played with the balloon . in the end they were happy . one day in spring the quiet"},"module_dm":{"free":"one day in fall the sleepy girl played with the twins in the pond . the girl wore the mittens and boots . the girl drank cold milk . the girl took the took the skates . the girl","forced":"one day in winter the happy child played with the girl in the pond . it was cold and snow fell . the child went skating . the child took the took the skates . the twins played with the"},"dense_wm":{"free":"one day in fall the sleepy girl played with the twins in the pond . the girl squeezed the puzzle . the girl said sorry for being late . the took the took the took the . the took","forced":"one day in winter the happy child played with the girl in the pond . it was cold and snow fell . the child went skating . the child took the took the skates . the twins played with the"}},"full":0.3626,"module_dec":{"p":0.3732,"core":0.4807,"spec":0.1823},"probe":[0.6589,0.7526,1.0,1.0],"dense_p":0.1926},{"seed":1,"p":0.005234,"lo":-5.245,"tgt":0.451,"spec":1.0,"core":0.4471,"budget":0.5471,"rand":{"p":0.0279,"gain":1.711},"token":{"p":0.8749,"gain":7.215,"margin":5.504,"spec":0.8177,"cell":"L4|5.65685"},"data":{"p":0.1636,"gain":3.668,"margin":1.957,"kind":"full_dm","spec":0.5573},"kinds":{"own_wm":{"p":0.102,"margin":1.385},"own_caa":{"p":0.02301,"margin":-0.1847},"full_dm":{"p":0.1636,"margin":1.957},"module_mean":{"p":0.1428,"margin":1.773},"module_dm":{"p":0.09893,"margin":1.348},"dense_wm":{"p":0.1446,"margin":1.809},"token":{"p":0.8749,"margin":5.504}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.1094,"took":7,"right":6}},"own_wm":{"free":{"open":0.04688,"went":0.125,"took":3,"right":3},"forced":{"open":1.0,"went":0.2656,"took":13,"right":7}},"own_caa":{"free":{"open":0.01562,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"token":{"free":{"open":0.9219,"went":0.07812,"took":5,"right":3},"forced":{"open":1.0,"went":0.07812,"took":2,"right":2}},"full_dm":{"free":{"open":0.125,"went":0.4531,"took":16,"right":9},"forced":{"open":1.0,"went":0.4062,"took":19,"right":9}},"module_mean":{"free":{"open":0.1094,"went":0.0625,"took":0,"right":0},"forced":{"open":1.0,"went":0.1719,"took":7,"right":1}},"module_dm":{"free":{"open":0.04688,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.09375,"took":3,"right":0}},"dense_wm":{"free":{"open":0.1094,"went":0.5781,"took":22,"right":6},"forced":{"open":1.0,"went":0.7031,"took":29,"right":8}}},"examples":{"base":{"free":"one day in summer the kind girl played with the baby in the field . the puppy was sad but the girl hugged it . the baby cried with joy . the girl played with the balloon . in","forced":"one day in winter the brave girl played with the boy in the yard . the girl wore the mittens and boots . the girl drank cold milk . the girl played with the puzzle . in the end they"},"own_wm":{"free":"one day in summer the kind girl played with the baby in the field . the puppy was sad but the girl hugged it . the girl said sorry for being late . the girl played with the wagon","forced":"one day in winter the quiet girl played with the boy in the porch . the girl wore the mittens and boots . the girl drank cold milk . the girl played with the teddy . in the end they"},"own_caa":{"free":"one day in summer the kind girl played with the baby in the field . the puppy was sad but the girl hugged it . the girl drank cold milk . the girl played with the balloon . in","forced":"one day in winter the girl played with the twins in the hill . the girl said sorry for being late . the girl cried with joy . the girl played with the doll . in the end they were"},"token":{"free":"one day in summer the kind girl played with the baby in the field . the puppy was sad but the girl hugged it . the baby cried with joy . the girl played with the balloon . in","forced":"one day in winter the quiet girl played with the boy in the porch . the girl wore the mittens and boots . the girl drank cold milk . the girl played with the kite . in the end they"},"full_dm":{"free":"one day in summer the kind girl played with the baby in the field . the puppy was sad but the girl hugged it . the girl said sorry for being late . the girl played with the wagon","forced":"one day in winter the quiet girl played with the boy in the porch . snowshoeing fell in the sled . the cat was sad but the girl hugged were happy . the girl played with the balloon . in"},"module_mean":{"free":"one day in summer the kind baby played with the baby in the field . the baby drank cold milk . the baby said sorry for being late . the baby played with the balloon . in the end","forced":"one day in winter the girl played with the twins in the hill . it was cold and boots . the girl went hockey . the girl took the girl played with the doll . in the end they were"},"module_dm":{"free":"one day in summer the kind baby played with the boy in the field . the puppy was sad but the baby hugged it . the baby drank cold milk . the baby played with the balloon . in","forced":"one day in winter the girl played with the twins in the hill . it was cold and boots . the girl went hockey . the girl took the girl played with the doll . in the end they were"},"dense_wm":{"free":"one day in summer the kind girl played with the baby in the field . the puppy was sad but the went hockey . the girl took the went snowboarding . the girl took the sled . the girl","forced":"one day in winter the quiet girl played with the boy in the porch . snowshoeing fell in the sled . the cat was sad but the girl hugged it . the girl played with the sled . in the"}},"full":0.2461,"module_dec":{"p":0.2053,"core":0.4739,"spec":0.25},"probe":[0.3568,1.0,1.0,1.0],"dense_p":0.1812},{"seed":2,"p":0.00356,"lo":-5.632,"tgt":0.4655,"spec":1.0,"core":0.4412,"budget":0.5412,"rand":{"p":0.02586,"gain":2.051},"token":{"p":0.9309,"gain":8.281,"margin":6.229,"spec":0.1042,"cell":"L4|5.65685"},"data":{"p":0.05828,"gain":2.88,"margin":0.8286,"kind":"module_mean","spec":0.7396},"kinds":{"own_wm":{"p":0.02635,"margin":0.01668},"own_caa":{"p":0.005289,"margin":-1.642},"full_dm":{"p":0.0114,"margin":-0.8641},"module_mean":{"p":0.05828,"margin":0.8286},"module_dm":{"p":0.006215,"margin":-1.472},"dense_wm":{"p":0.029,"margin":0.1154},"token":{"p":0.9309,"margin":6.229}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.8281,"took":50,"right":46}},"own_wm":{"free":{"open":0.04688,"went":0.09375,"took":3,"right":2},"forced":{"open":1.0,"went":0.3906,"took":13,"right":4}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.1094,"took":1,"right":0}},"token":{"free":{"open":0.9219,"went":0.09375,"took":5,"right":2},"forced":{"open":1.0,"went":0.125,"took":5,"right":1}},"full_dm":{"free":{"open":0.01562,"went":0.07812,"took":4,"right":2},"forced":{"open":1.0,"went":0.6094,"took":38,"right":16}},"module_mean":{"free":{"open":0.04688,"went":0.04688,"took":2,"right":0},"forced":{"open":1.0,"went":0.3906,"took":19,"right":1}},"module_dm":{"free":{"open":0.0,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.2969,"took":18,"right":2}},"dense_wm":{"free":{"open":0.04688,"went":0.0625,"took":3,"right":2},"forced":{"open":1.0,"went":0.3906,"took":21,"right":5}}},"examples":{"base":{"free":"one day in summer the brave boy played with the twins in the field . the twins cried with joy . the bird was sad but the boy hugged it . the boy played with the robot . in","forced":"one day in winter the quiet twins played with the child in the garden . it was cold and snow fell . the twins went iceracing . the twins took the sled . the twins played with the blocks ."},"own_wm":{"free":"one day in summer the brave boy played with the twins in the pond . the twins cried with joy . the bird was sad but the boy hugged it . the boy played with the robot . in","forced":"one day in winter the quiet twins played with the baby in the garden . it . fell in the garden . the baby cried with joy . the twins played with the blocks . in the end they were"},"own_caa":{"free":"one day in summer the little boy played with the twins in the pond . the dog was sad but the boy hugged it . the boy wore the mittens and boots . the boy played with the robot","forced":"one day in winter the slapped the kind girl played winter the teddy . doll bobsledding . the cat was sad but the girl hugged it . the girl said sorry for sledding for being late . the girl played"},"token":{"free":"one day in winter the brave boy played with the twins in the pond . winter the boat fell in the hill . the boy said sorry for being late . the boy played with the boy in the","forced":"one day in winter the quiet twins winter the quiet child robot . the doll fell in the hill . the twins played with the winter in the garden . in the end they were happy . one day in"},"full_dm":{"free":"one day in summer the brave boy played with the twins in the pond . the twins cried with joy . the bird was sad but the boy hugged it . the boy played with the robot . in","forced":"one day in winter the quiet twins played with the baby in the garden . it . the baby cried with joy . the twins kicked the wagon . the twins played with the wagon . in the end they"},"module_mean":{"free":"one day in summer the brave boy played with the twins in the field . the train fell in the cold and boots . the boy played with the train . in the end they were happy . one","forced":"one day in winter the quiet twins winter the quiet child robot . the doll fell in the hill . the twins kicked the caroling . the twins played with the sled . in the end they were happy ."},"module_dm":{"free":"one day in summer the brave boy played with the twins in the field . the train fell in the icefishing . the boy kicked the train . the boy played with the train . in the end they","forced":"one day in winter the quiet twins played with the child in the garden . it was cold and snow fell . the twins went iceracing . the twins took the sled . the twins played with the blocks ."},"dense_wm":{"free":"one day in summer the brave boy played with the twins in the pond . the twins cried with joy . the bird was sad but the took the skates . the boy played with the robot . in","forced":"one day in winter the quiet twins played with the baby in the garden . it . fell in the garden . the baby cried with joy . the twins played with the train . in the end they were"}},"full":0.1708,"module_dec":{"p":0.168,"core":0.4707,"spec":0.0},"probe":[0.5755,0.8177,0.9948,1.0],"dense_p":0.09314},{"seed":3,"p":0.01478,"lo":-4.196,"tgt":0.4384,"spec":1.0,"core":0.4474,"budget":0.5474,"rand":{"p":0.06173,"gain":1.576},"token":{"p":0.869,"gain":6.115,"margin":4.539,"spec":0.9948,"cell":"L4|4"},"data":{"p":0.26,"gain":3.241,"margin":1.665,"kind":"own_wm","spec":0.9323},"kinds":{"own_wm":{"p":0.26,"margin":1.665},"own_caa":{"p":0.02463,"margin":-1.043},"full_dm":{"p":0.198,"margin":1.266},"module_mean":{"p":0.1007,"margin":0.4407},"module_dm":{"p":0.07344,"margin":0.1148},"dense_wm":{"p":0.2392,"margin":1.499},"token":{"p":0.869,"margin":4.539}},"stories":{"base":{"free":{"open":0.01562,"went":0.01562,"took":1,"right":1},"forced":{"open":1.0,"went":0.7969,"took":50,"right":45}},"own_wm":{"free":{"open":0.25,"went":0.375,"took":10,"right":6},"forced":{"open":1.0,"went":0.5938,"took":18,"right":12}},"own_caa":{"free":{"open":0.01562,"went":0.04688,"took":2,"right":1},"forced":{"open":1.0,"went":0.1719,"took":10,"right":4}},"token":{"free":{"open":0.9062,"went":0.3906,"took":22,"right":14},"forced":{"open":1.0,"went":0.4844,"took":29,"right":20}},"full_dm":{"free":{"open":0.1875,"went":0.2031,"took":8,"right":3},"forced":{"open":1.0,"went":0.5781,"took":32,"right":23}},"module_mean":{"free":{"open":0.07812,"went":0.07812,"took":5,"right":3},"forced":{"open":1.0,"went":0.7656,"took":48,"right":20}},"module_dm":{"free":{"open":0.07812,"went":0.01562,"took":0,"right":0},"forced":{"open":1.0,"went":0.07812,"took":5,"right":1}},"dense_wm":{"free":{"open":0.2188,"went":0.1875,"took":9,"right":6},"forced":{"open":1.0,"went":0.6719,"took":40,"right":28}}},"examples":{"base":{"free":"one day in fall the sleepy child played with the baby in the park . the robot fell in the park . the child drank cold milk . the child played with the robot . in the end they","forced":"one day in winter the shiny child played with the twins in the field . it was cold and snow fell . the child went sledding . the child took the sled . the child played with the drum ."},"own_wm":{"free":"one day in fall the sleepy child played with the baby in the park . the robot fell in the sleepy boy went curling . the skates . the child took the skates . the child played with the","forced":"one day in winter the shiny boy played with the twins in the field . fell in the yard . it was cold and snow fell . the took the fell . the . the fell in the girl played"},"own_caa":{"free":"one day in fall the sleepy child played with the baby in the park . the robot fell in the sleepy boy wore the mittens and boots . the robot fell in the with the yoyo fell in the","forced":"one day in winter the shiny child played with the twins in the field . it was sad but the sleepy child hugged it . the crayons fell in the hill . the child played with the boat . in"},"token":{"free":"one day in winter the sleepy child played with the baby in the park . winter the kite . in the end they were happy . one day in spring the sleepy girl played with the boy in the","forced":"one day in winter the shiny boy played with the twins in the field . it was cold and snow fell . the boy went sledding . the boy took the sled . the boy played with the drum ."},"full_dm":{"free":"one day in fall the sleepy child played with the baby in the park . the robot fell in the sleepy boy went curling . the skates . the child took the skates . the child played with the","forced":"one day in winter the little boy played with the twins in the field . fell in the yard . it was cold and snow fell . the took the fell . the . the fell in the girl played"},"module_mean":{"free":"one day in fall the sleepy child played with the baby in the park . the robot fell in the park . the child drank cold milk . the child played with the robot . in the end they","forced":"one day in winter the shiny child played with the twins in the field . it was cold and snow fell . the child went sledding . the child took the . the child played with the balloon . in"},"module_dm":{"free":"one day in fall the sleepy child played with the twins in the park . the robot fell in the took the took porch . the dog took the mittens and took the took the took the mittens .","forced":"one day in winter the little boy played with the twins in the field . it was cold and snow sleepy baby in the porch . the boy took the hill . the boy played with the balloon . in"},"dense_wm":{"free":"one day in fall the sleepy child played with the baby in the park . the robot fell in the sleepy boy went curling . the child took the skates . the child played with the balloon . in","forced":"one day in winter the shiny boy played with the twins in the field . it was cold and snow fell . the boy went sledding . the took the skates . the boy played with the balloon . in"}},"full":0.5453,"module_dec":{"p":0.5197,"core":0.5263,"spec":0.005208},"probe":[0.4583,0.4714,0.5885,1.0],"dense_p":0.1721},{"seed":4,"p":0.004898,"lo":-5.312,"tgt":0.4659,"spec":1.0,"core":0.4475,"budget":0.5475,"rand":{"p":0.06017,"gain":2.59},"token":{"p":0.9309,"gain":7.946,"margin":5.357,"spec":0.3021,"cell":"all|2"},"data":{"p":0.1173,"gain":3.353,"margin":0.763,"kind":"module_mean","spec":0.0},"kinds":{"own_wm":{"p":0.07172,"margin":0.201},"own_caa":{"p":0.008504,"margin":-2.028},"full_dm":{"p":0.03921,"margin":-0.4574},"module_mean":{"p":0.1173,"margin":0.763},"module_dm":{"p":0.01405,"margin":-1.513},"dense_wm":{"p":0.02689,"margin":-0.854},"token":{"p":0.9309,"margin":5.357}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.4531,"took":24,"right":24}},"own_wm":{"free":{"open":0.0625,"went":0.125,"took":5,"right":1},"forced":{"open":1.0,"went":0.2188,"took":8,"right":2}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.07812,"took":4,"right":1}},"token":{"free":{"open":0.9531,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":1,"right":0}},"full_dm":{"free":{"open":0.04688,"went":0.1562,"took":7,"right":4},"forced":{"open":1.0,"went":0.3906,"took":18,"right":4}},"module_mean":{"free":{"open":0.1094,"went":0.125,"took":6,"right":0},"forced":{"open":1.0,"went":0.1094,"took":6,"right":1}},"module_dm":{"free":{"open":0.01562,"went":0.1406,"took":6,"right":0},"forced":{"open":1.0,"went":0.2344,"took":12,"right":0}},"dense_wm":{"free":{"open":0.03125,"went":0.125,"took":5,"right":2},"forced":{"open":1.0,"went":0.4844,"took":26,"right":9}}},"examples":{"base":{"free":"one day in spring the happy baby played with the twins in the hill . the crayons fell in the hill . the baby wore the mittens and boots . the baby played with the crayons . in the","forced":"one day in winter the happy twins played with the boy in the park . it was cold and snow fell . the twins went hockey . the twins took the mittens . the twins played with the truck ."},"own_wm":{"free":"one day in spring the happy baby played with the twins in the hill . the crayons fell in the hill . the baby smacked the and boots . the took the skiing . the took the to .","forced":"one day in winter the happy twins played with the boy in the park . it was cold and snow fell . the snow fell . the . the twins played with the wagon . in the end they were"},"own_caa":{"free":"one day in spring the happy baby played with the twins in the hill . the crayons fell in the hill . the baby played with the crayons . in the end they were happy . one day in","forced":"one day in winter popped . it . the baby played with the puzzle . in the end they were happy . one day in spring the happy baby played with the child in the field . the child cried"},"token":{"free":"one day in winter the happy baby played with the girl in the hill . in the girl cried with joy . the baby wore the mittens and boots . the baby played with the yoyo . in the","forced":"one day in winter the happy girl played with the boy in the park . it was sad but the child cried with joy . the child hugged it . the child played with the truck . in the end"},"full_dm":{"free":"one day in spring the happy baby played with the twins in the hill . the crayons fell in the hill . the baby smacked the and boots . the took the . the baby played with the crayons","forced":"one day in winter the happy twins played with the boy in the park . it was cold and snow fell . the twins went hockey . the went snowshoeing . the . the took the sled . the twins"},"module_mean":{"free":"one day in spring the happy baby played with the twins in the hill . the crayons fell in the hill . the baby played with the top . in the end they were happy . one day in","forced":"one day in winter the happy baby played with the boy in the park . it was cold and snow fell . the baby went hockey . the baby took the took the . the baby played with the boat"},"module_dm":{"free":"one day in spring the happy baby played with the twins in the hill . the crayons fell in the hill . the baby wore the mittens and boots . the baby played with the crayons . in the","forced":"one day in winter the happy twins played with the boy in the park . it was cold and snow fell . the twins went hockey . the twins took the took the mittens . the twins played with the"},"dense_wm":{"free":"one day in spring the happy baby played with the twins in the hill . the crayons fell in the hill . the baby said sorry for being late . the baby played with the crayons . in the","forced":"one day in winter the happy baby played with the boy in the park . it was cold and snow fell . the baby went hockey . the baby took the took the mittens . the baby played with the"}},"full":0.3718,"module_dec":{"p":0.3255,"core":0.48,"spec":0.125},"probe":[0.4089,0.4297,0.526,1.0],"dense_p":0.1068},{"seed":5,"p":0.002944,"lo":-5.823,"tgt":0.4612,"spec":1.0,"core":0.443,"budget":0.543,"rand":{"p":0.01038,"gain":1.281},"token":{"p":0.6872,"gain":6.623,"margin":5.343,"spec":0.9635,"cell":"L4|5.65685"},"data":{"p":0.03433,"gain":2.5,"margin":1.219,"kind":"full_dm","spec":1.0},"kinds":{"own_wm":{"p":0.02701,"margin":0.9656},"own_caa":{"p":0.007541,"margin":-0.3272},"full_dm":{"p":0.03433,"margin":1.219},"module_mean":{"p":0.01827,"margin":0.5696},"module_dm":{"p":0.004053,"margin":-0.9546},"dense_wm":{"p":0.02681,"margin":0.9612},"token":{"p":0.6872,"margin":5.343}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.2031,"took":12,"right":12}},"own_wm":{"free":{"open":0.01562,"went":0.0625,"took":0,"right":0},"forced":{"open":1.0,"went":0.5156,"took":27,"right":18}},"own_caa":{"free":{"open":0.01562,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0625,"took":3,"right":0}},"token":{"free":{"open":0.6562,"went":0.1719,"took":3,"right":2},"forced":{"open":1.0,"went":0.2188,"took":8,"right":6}},"full_dm":{"free":{"open":0.03125,"went":0.1719,"took":3,"right":2},"forced":{"open":1.0,"went":0.5469,"took":22,"right":14}},"module_mean":{"free":{"open":0.01562,"went":0.09375,"took":2,"right":1},"forced":{"open":1.0,"went":0.4375,"took":15,"right":10}},"module_dm":{"free":{"open":0.0,"went":0.1094,"took":1,"right":1},"forced":{"open":1.0,"went":0.2969,"took":12,"right":6}},"dense_wm":{"free":{"open":0.01562,"went":0.125,"took":4,"right":2},"forced":{"open":1.0,"went":0.5312,"took":29,"right":17}}},"examples":{"base":{"free":"one day in spring the brave boy played with the girl in the pond . the kite fell in the pond . the puppy was sad but the boy hugged it . the boy played with the kite .","forced":"one day in winter the funny girl played with the baby in the pond . the girl wore the scarf and boots . the baby cried with joy . the girl played with the boat . in the end they"},"own_wm":{"free":"one day in spring the brave boy played with the child in the pond . the child cried with joy . the boy bumped the doll . the boy played with the . in the end they were happy","forced":"one day in winter the funny baby played with the baby in the field . it was cold and snow fell . the baby went sledding . the baby took the icefishing . the baby played with the train ."},"own_caa":{"free":"one day in spring the brave boy played with the child in the pond . the kite skating in the pond . the puppy was sad but the boy hugged it . the puppy grabbed the kite . the","forced":"one day in winter the sleepy girl played with the baby in the pond . it was cold skating . the boat fell in the pushed the boat . the girl played with the boat . in the end they"},"token":{"free":"one day in winter the brave boy played with the girl in the pond . the kite fell in the pond . the puppy pushed the winter the kite . the boy played with the winter the winter the","forced":"one day in winter the funny girl played with the baby in the pond . it was cold and snow fell . the girl went tobogganing . the girl took the scarf . the girl played with the puzzle ."},"full_dm":{"free":"one day in spring the brave boy played with the child in the pond . the child cried with joy . the snow fell . the . the brave girl took the mittens . the boy played with the","forced":"one day in winter the funny baby played with the baby in the field . it was cold skating . the baby cried with joy . the baby played with the balloon . in the end they were happy ."},"module_mean":{"free":"one day in spring the brave boy played with the boy in the pond . the boy cried with joy . the puppy bumped the train . the boy played with the they were happy . winter the kind","forced":"one day in winter the funny baby played with the boy in the field . it was cold fall the puppy was cold and snow fell . the baby went snowangeling . the baby took the skates . the baby"},"module_dm":{"free":"one day in spring the brave boy played with the girl in the pond . the boy skating . the blocks fell in the skates . the boy played with the blocks . in the end they were happy","forced":"one day in winter the funny girl played with the baby in the field . the girl bumped the ball . the girl said sorry for being late . the girl played with the ball . in the end they"},"dense_wm":{"free":"one day in spring the brave boy played with the child in the pond . the child cried with joy . the snow fell . the . the brave girl took the they were happy . one day in","forced":"one day in winter the funny girl played with the baby in the field . it was cold skating . the girl bit the doll . the girl played with the . in the end they were happy . one"}},"full":0.1275,"module_dec":{"p":0.1339,"core":0.4797,"spec":0.7031},"probe":[0.375,0.4062,1.0,1.0],"dense_p":0.1003}]},"filter":[{"seed":0,"p":1.072e-05,"lo":-11.44,"tgt":3.521,"spec":0.0,"core":0.4556,"budget":0.5556,"rand":{"p":0.0003031,"gain":3.414},"token":{"p":0.0833,"gain":9.156,"margin":5.743,"spec":0.0,"cell":"L4|8"},"data":{"p":0.00106,"gain":4.66,"margin":1.246,"kind":"dense_wm","spec":0.0},"kinds":{"own_wm":{"p":2.802e-05,"margin":-2.443},"own_caa":{"p":2.563e-05,"margin":-2.537},"dense_wm":{"p":0.00106,"margin":1.246},"gram_full_dm":{"p":0.0001591,"margin":-0.6922},"gram_module_mean":{"p":0.0005114,"margin":0.6875},"gram_module_dm":{"p":7.754e-05,"margin":-1.378},"token":{"p":0.0833,"margin":5.743}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.07812,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}}},{"seed":1,"p":2.789e-05,"lo":-10.48,"tgt":3.646,"spec":0.0,"core":0.4443,"budget":0.5443,"rand":{"p":0.000615,"gain":3.14},"token":{"p":0.085,"gain":8.233,"margin":5.093,"spec":0.0,"cell":"L4|8"},"data":{"p":0.001879,"gain":4.308,"margin":1.168,"kind":"gram_module_dm","spec":0.0},"kinds":{"own_wm":{"p":0.0001094,"margin":-1.754},"own_caa":{"p":0.0001092,"margin":-1.766},"dense_wm":{"p":0.001764,"margin":1.04},"gram_full_dm":{"p":0.001627,"margin":0.9706},"gram_module_mean":{"p":0.0001538,"margin":-1.405},"gram_module_dm":{"p":0.001879,"margin":1.168},"token":{"p":0.085,"margin":5.093}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0625,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"gram_module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}}},{"seed":2,"p":3.557e-05,"lo":-10.24,"tgt":3.303,"spec":0.0,"core":0.4432,"budget":0.5432,"rand":{"p":0.0009209,"gain":3.311},"token":{"p":0.1333,"gain":8.5,"margin":5.189,"spec":0.0,"cell":"L4|8"},"data":{"p":0.001936,"gain":4.439,"margin":1.128,"kind":"gram_module_mean","spec":0.0},"kinds":{"own_wm":{"p":0.0001907,"margin":-1.607},"own_caa":{"p":8.491e-05,"margin":-2.437},"dense_wm":{"p":0.001041,"margin":0.1135},"gram_full_dm":{"p":0.0005043,"margin":-0.6208},"gram_module_mean":{"p":0.001936,"margin":1.128},"gram_module_dm":{"p":0.0004442,"margin":-0.6054},"token":{"p":0.1333,"margin":5.189}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.09375,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}}},{"seed":3,"p":7.858e-06,"lo":-11.75,"tgt":3.601,"spec":0.0,"core":0.4438,"budget":0.5438,"rand":{"p":0.0001009,"gain":2.588},"token":{"p":0.1108,"gain":9.928,"margin":7.34,"spec":0.0,"cell":"L4|8"},"data":{"p":0.0004958,"gain":4.192,"margin":1.604,"kind":"dense_wm","spec":0.0},"kinds":{"own_wm":{"p":2.206e-05,"margin":-1.543},"own_caa":{"p":6.408e-05,"margin":-0.3853},"dense_wm":{"p":0.0004958,"margin":1.604},"gram_full_dm":{"p":0.0001509,"margin":0.4398},"gram_module_mean":{"p":0.0001308,"margin":0.2769},"gram_module_dm":{"p":2.042e-05,"margin":-1.605},"token":{"p":0.1108,"margin":7.34}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0625,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}}},{"seed":4,"p":2.381e-05,"lo":-10.64,"tgt":3.44,"spec":0.0,"core":0.446,"budget":0.546,"rand":{"p":0.0005217,"gain":3.118},"token":{"p":0.03445,"gain":7.35,"margin":4.232,"spec":0.0,"cell":"L4|8"},"data":{"p":0.0006905,"gain":3.395,"margin":0.2771,"kind":"dense_wm","spec":0.0},"kinds":{"own_wm":{"p":0.0001348,"margin":-1.365},"own_caa":{"p":0.000162,"margin":-1.186},"dense_wm":{"p":0.0006905,"margin":0.2771},"gram_full_dm":{"p":0.0004519,"margin":-0.1443},"gram_module_mean":{"p":0.0004928,"margin":-0.05982},"gram_module_dm":{"p":8.341e-05,"margin":-1.835},"token":{"p":0.03445,"margin":4.232}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.03125,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}},"gram_module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.01562,"took":0,"right":0}}}},{"seed":5,"p":8.654e-06,"lo":-11.65,"tgt":3.516,"spec":0.0,"core":0.4472,"budget":0.5472,"rand":{"p":9.619e-05,"gain":2.436},"token":{"p":0.002279,"gain":5.591,"margin":3.155,"spec":0.0,"cell":"L4|8"},"data":{"p":0.0001553,"gain":2.9,"margin":0.4637,"kind":"dense_wm","spec":0.0},"kinds":{"own_wm":{"p":3.032e-05,"margin":-1.17},"own_caa":{"p":2.197e-05,"margin":-1.499},"dense_wm":{"p":0.0001553,"margin":0.4637},"gram_full_dm":{"p":2.588e-05,"margin":-1.336},"gram_module_mean":{"p":0.0001199,"margin":0.2024},"gram_module_dm":{"p":1.013e-05,"margin":-2.257},"token":{"p":0.002279,"margin":3.155}},"stories":{"base":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"own_caa":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"token":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_full_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_module_mean":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"gram_module_dm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}},"dense_wm":{"free":{"open":0.0,"went":0.0,"took":0,"right":0},"forced":{"open":1.0,"went":0.0,"took":0,"right":0}}}}],"dense":[{"seed":0,"p":0.1926,"lo":-1.43,"tgt":0.3519,"spec":1.0,"core":0.4464,"budget":0.5464,"rand":{"p":0.5187,"gain":1.545},"token":{"p":0.9757,"gain":5.157,"margin":3.612,"spec":1.0,"cell":"L3|4"},"data":{"p":0.8364,"gain":3.108,"margin":1.563,"kind":"own_wm","spec":0.8854},"kinds":{"own_wm":{"p":0.8364,"margin":1.563},"own_caa":{"p":0.3075,"margin":-0.9097},"gram_full_dm":{"p":0.5605,"margin":0.2077},"gram_module_mean":{"p":0.8336,"margin":1.547},"gram_module_dm":{"p":0.8266,"margin":1.477},"token":{"p":0.9757,"margin":3.612}},"stories":{"base":{"free":{"open":0.2188,"went":0.2031,"took":13,"right":12},"forced":{"open":1.0,"went":0.9688,"took":62,"right":58}},"own_wm":{"free":{"open":0.8281,"went":0.6094,"took":39,"right":21},"forced":{"open":1.0,"went":0.6875,"took":44,"right":25}},"own_caa":{"free":{"open":0.3125,"went":0.1719,"took":10,"right":7},"forced":{"open":1.0,"went":0.4688,"took":30,"right":22}},"token":{"free":{"open":0.9531,"went":0.7188,"took":46,"right":34},"forced":{"open":1.0,"went":0.7812,"took":50,"right":38}},"gram_full_dm":{"free":{"open":0.6094,"went":0.4062,"took":26,"right":12},"forced":{"open":1.0,"went":0.6875,"took":44,"right":25}},"gram_module_mean":{"free":{"open":0.8281,"went":0.7969,"took":44,"right":28},"forced":{"open":1.0,"went":0.9062,"took":50,"right":33}},"gram_module_dm":{"free":{"open":0.8281,"went":0.5938,"took":38,"right":26},"forced":{"open":1.0,"went":0.7344,"took":47,"right":38}}}},{"seed":1,"p":0.1812,"lo":-1.505,"tgt":0.3524,"spec":1.0,"core":0.447,"budget":0.547,"rand":{"p":0.4178,"gain":1.232},"token":{"p":0.9856,"gain":5.776,"margin":4.543,"spec":0.9635,"cell":"L4|4"},"data":{"p":0.8642,"gain":3.422,"margin":2.19,"kind":"gram_module_dm","spec":0.9844},"kinds":{"own_wm":{"p":0.8493,"margin":2.035},"own_caa":{"p":0.5174,"margin":0.3872},"gram_full_dm":{"p":0.8116,"margin":1.768},"gram_module_mean":{"p":0.4496,"margin":0.1113},"gram_module_dm":{"p":0.8642,"margin":2.19},"token":{"p":0.9856,"margin":4.543}},"stories":{"base":{"free":{"open":0.1406,"went":0.1406,"took":9,"right":9},"forced":{"open":1.0,"went":0.9531,"took":61,"right":61}},"own_wm":{"free":{"open":0.875,"went":0.875,"took":53,"right":32},"forced":{"open":1.0,"went":0.9062,"took":56,"right":44}},"own_caa":{"free":{"open":0.4688,"went":0.25,"took":9,"right":1},"forced":{"open":1.0,"went":0.4844,"took":25,"right":4}},"token":{"free":{"open":1.0,"went":0.7969,"took":50,"right":38},"forced":{"open":1.0,"went":0.7812,"took":49,"right":36}},"gram_full_dm":{"free":{"open":0.8125,"went":0.8594,"took":51,"right":38},"forced":{"open":1.0,"went":0.9062,"took":55,"right":42}},"gram_module_mean":{"free":{"open":0.4219,"went":0.5,"took":32,"right":23},"forced":{"open":1.0,"went":0.9375,"took":54,"right":42}},"gram_module_dm":{"free":{"open":0.875,"went":0.8594,"took":53,"right":35},"forced":{"open":1.0,"went":0.8594,"took":51,"right":41}}}},{"seed":2,"p":0.09314,"lo":-2.273,"tgt":0.3585,"spec":1.0,"core":0.4458,"budget":0.5458,"rand":{"p":0.2821,"gain":1.384},"token":{"p":0.9626,"gain":5.537,"margin":4.154,"spec":1.0,"cell":"L4|4"},"data":{"p":0.6445,"gain":2.935,"margin":1.551,"kind":"own_wm","spec":0.875},"kinds":{"own_wm":{"p":0.6445,"margin":1.551},"own_caa":{"p":0.1034,"margin":-1.215},"gram_full_dm":{"p":0.1908,"margin":-0.5452},"gram_module_mean":{"p":0.5277,"margin":1.026},"gram_module_dm":{"p":0.176,"margin":-0.6094},"token":{"p":0.9626,"margin":4.154}},"stories":{"base":{"free":{"open":0.09375,"went":0.09375,"took":6,"right":6},"forced":{"open":1.0,"went":0.9844,"took":63,"right":62}},"own_wm":{"free":{"open":0.625,"went":0.6094,"took":38,"right":26},"forced":{"open":1.0,"went":0.8125,"took":50,"right":26}},"own_caa":{"free":{"open":0.07812,"went":0.0625,"took":1,"right":1},"forced":{"open":1.0,"went":0.3281,"took":17,"right":8}},"token":{"free":{"open":0.9688,"went":0.8594,"took":52,"right":36},"forced":{"open":1.0,"went":0.9219,"took":58,"right":40}},"gram_full_dm":{"free":{"open":0.1562,"went":0.1719,"took":11,"right":9},"forced":{"open":1.0,"went":0.9531,"took":61,"right":47}},"gram_module_mean":{"free":{"open":0.5625,"went":0.6406,"took":40,"right":34},"forced":{"open":1.0,"went":0.9688,"took":60,"right":49}},"gram_module_dm":{"free":{"open":0.1719,"went":0.1562,"took":10,"right":4},"forced":{"open":1.0,"went":0.4844,"took":31,"right":20}}}},{"seed":3,"p":0.1721,"lo":-1.566,"tgt":0.3503,"spec":1.0,"core":0.4457,"budget":0.5457,"rand":{"p":0.363,"gain":1.035},"token":{"p":0.9376,"gain":4.295,"margin":3.26,"spec":1.0,"cell":"L4|2.82843"},"data":{"p":0.8546,"gain":3.374,"margin":2.339,"kind":"gram_module_mean","spec":1.0},"kinds":{"own_wm":{"p":0.8281,"margin":2.144},"own_caa":{"p":0.2278,"margin":-0.6739},"gram_full_dm":{"p":0.5064,"margin":0.5876},"gram_module_mean":{"p":0.8546,"margin":2.339},"gram_module_dm":{"p":0.2058,"margin":-0.8121},"token":{"p":0.9376,"margin":3.26}},"stories":{"base":{"free":{"open":0.1406,"went":0.125,"took":8,"right":8},"forced":{"open":1.0,"went":1.0,"took":64,"right":62}},"own_wm":{"free":{"open":0.8438,"went":0.7031,"took":44,"right":35},"forced":{"open":1.0,"went":0.7812,"took":48,"right":37}},"own_caa":{"free":{"open":0.2031,"went":0.2031,"took":12,"right":9},"forced":{"open":1.0,"went":0.8438,"took":51,"right":35}},"token":{"free":{"open":0.9688,"went":0.9062,"took":58,"right":53},"forced":{"open":1.0,"went":0.8906,"took":56,"right":47}},"gram_full_dm":{"free":{"open":0.4531,"went":0.4219,"took":26,"right":17},"forced":{"open":1.0,"went":0.9062,"took":56,"right":40}},"gram_module_mean":{"free":{"open":0.8906,"went":0.6875,"took":41,"right":34},"forced":{"open":1.0,"went":0.875,"took":51,"right":38}},"gram_module_dm":{"free":{"open":0.1562,"went":0.1562,"took":10,"right":8},"forced":{"open":1.0,"went":0.9844,"took":63,"right":45}}}},{"seed":4,"p":0.1068,"lo":-2.121,"tgt":0.3548,"spec":1.0,"core":0.4468,"budget":0.5468,"rand":{"p":0.3318,"gain":1.469},"token":{"p":0.9843,"gain":6.293,"margin":4.824,"spec":0.776,"cell":"L4|4"},"data":{"p":0.8514,"gain":3.953,"margin":2.484,"kind":"gram_module_mean","spec":0.9583},"kinds":{"own_wm":{"p":0.5225,"margin":0.7676},"own_caa":{"p":0.2427,"margin":-0.4717},"gram_full_dm":{"p":0.3983,"margin":0.2668},"gram_module_mean":{"p":0.8514,"margin":2.484},"gram_module_dm":{"p":0.2554,"margin":-0.3142},"token":{"p":0.9843,"margin":4.824}},"stories":{"base":{"free":{"open":0.1094,"went":0.1094,"took":7,"right":7},"forced":{"open":1.0,"went":0.9844,"took":63,"right":63}},"own_wm":{"free":{"open":0.5156,"went":0.5312,"took":31,"right":20},"forced":{"open":1.0,"went":0.9531,"took":61,"right":44}},"own_caa":{"free":{"open":0.2344,"went":0.1406,"took":8,"right":3},"forced":{"open":1.0,"went":0.7188,"took":43,"right":30}},"token":{"free":{"open":1.0,"went":0.8281,"took":49,"right":27},"forced":{"open":1.0,"went":0.8281,"took":52,"right":27}},"gram_full_dm":{"free":{"open":0.375,"went":0.3906,"took":24,"right":17},"forced":{"open":1.0,"went":0.9375,"took":60,"right":49}},"gram_module_mean":{"free":{"open":0.8594,"went":0.7344,"took":47,"right":33},"forced":{"open":1.0,"went":0.9062,"took":56,"right":39}},"gram_module_dm":{"free":{"open":0.2812,"went":0.5469,"took":29,"right":9},"forced":{"open":1.0,"went":0.7344,"took":43,"right":16}}}},{"seed":5,"p":0.1003,"lo":-2.19,"tgt":0.3589,"spec":1.0,"core":0.4462,"budget":0.5462,"rand":{"p":0.213,"gain":0.9271},"token":{"p":0.9592,"gain":5.372,"margin":4.445,"spec":1.0,"cell":"L4|4"},"data":{"p":0.7866,"gain":3.514,"margin":2.587,"kind":"gram_module_mean","spec":1.0},"kinds":{"own_wm":{"p":0.5062,"margin":1.31},"own_caa":{"p":0.1323,"margin":-0.6078},"gram_full_dm":{"p":0.1405,"margin":-0.5423},"gram_module_mean":{"p":0.7866,"margin":2.587},"gram_module_dm":{"p":0.0997,"margin":-0.9338},"token":{"p":0.9592,"margin":4.445}},"stories":{"base":{"free":{"open":0.125,"went":0.125,"took":8,"right":8},"forced":{"open":1.0,"went":0.9844,"took":63,"right":63}},"own_wm":{"free":{"open":0.4531,"went":0.5156,"took":31,"right":23},"forced":{"open":1.0,"went":0.9531,"took":56,"right":41}},"own_caa":{"free":{"open":0.1406,"went":0.1562,"took":7,"right":5},"forced":{"open":1.0,"went":0.8125,"took":50,"right":38}},"token":{"free":{"open":0.9688,"went":0.875,"took":51,"right":45},"forced":{"open":1.0,"went":0.8906,"took":56,"right":51}},"gram_full_dm":{"free":{"open":0.1406,"went":0.1875,"took":9,"right":6},"forced":{"open":1.0,"went":0.875,"took":52,"right":39}},"gram_module_mean":{"free":{"open":0.7344,"went":0.6875,"took":44,"right":39},"forced":{"open":1.0,"went":0.9531,"took":59,"right":52}},"gram_module_dm":{"free":{"open":0.125,"went":0.125,"took":8,"right":8},"forced":{"open":1.0,"went":0.9844,"took":63,"right":63}}}}],"roles":[{"p_as":0.5,"seed":0,"winter":{"winter (the opening decision)":{"n":307,"cost":12.94,"core":13.53},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":9.494,"core":9.56},"activity":{"n":307,"cost":0.4068,"core":3.221},"item (the fact)":{"n":308,"cost":1.066,"core":1.656},"everything else":{"n":11950,"cost":1.5,"core":1.806}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.01793},"item (the fact)":{"n":88,"cost":-0.00812},"season words":{"n":343,"cost":-0.1692},"everything else":{"n":13775,"cost":-0.00453}}},{"p_as":0.5,"seed":1,"winter":{"winter (the opening decision)":{"n":307,"cost":12.52,"core":13.42},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":6.768,"core":6.845},"activity":{"n":307,"cost":7.927,"core":10.75},"item (the fact)":{"n":308,"cost":1.23,"core":1.597},"everything else":{"n":11950,"cost":1.346,"core":1.675}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.01607},"item (the fact)":{"n":88,"cost":0.01013},"season words":{"n":343,"cost":-0.07767},"everything else":{"n":13775,"cost":-0.002491}}},{"p_as":0.5,"seed":2,"winter":{"winter (the opening decision)":{"n":307,"cost":12.16,"core":13.39},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":10.57,"core":10.67},"activity":{"n":307,"cost":3.201,"core":6.018},"item (the fact)":{"n":308,"cost":1.146,"core":1.563},"everything else":{"n":11950,"cost":1.622,"core":1.934}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":0.009205},"item (the fact)":{"n":88,"cost":0.02142},"season words":{"n":343,"cost":-0.0274},"everything else":{"n":13775,"cost":-4.491e-05}}},{"p_as":0.75,"seed":0,"winter":{"winter (the opening decision)":{"n":307,"cost":12.18,"core":12.61},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":3.731,"core":3.787},"activity":{"n":307,"cost":0.2205,"core":3.025},"item (the fact)":{"n":308,"cost":0.1405,"core":0.4685},"everything else":{"n":11950,"cost":0.7458,"core":1.053}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.006754},"item (the fact)":{"n":88,"cost":-0.001252},"season words":{"n":343,"cost":-0.1942},"everything else":{"n":13775,"cost":-0.005213}}},{"p_as":0.75,"seed":1,"winter":{"winter (the opening decision)":{"n":307,"cost":11.5,"core":12.13},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":2.304,"core":2.367},"activity":{"n":307,"cost":0.6855,"core":3.502},"item (the fact)":{"n":308,"cost":0.5675,"core":0.8512},"everything else":{"n":11950,"cost":0.7091,"core":1.029}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.005538},"item (the fact)":{"n":88,"cost":0.009834},"season words":{"n":343,"cost":-0.1272},"everything else":{"n":13775,"cost":-0.003008}}},{"p_as":0.75,"seed":2,"winter":{"winter (the opening decision)":{"n":307,"cost":11.24,"core":12.26},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":3.279,"core":3.357},"activity":{"n":307,"cost":0.04715,"core":2.864},"item (the fact)":{"n":308,"cost":0.2262,"core":0.5128},"everything else":{"n":11950,"cost":0.5359,"core":0.8463}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.003424},"item (the fact)":{"n":88,"cost":0.02582},"season words":{"n":343,"cost":-0.03626},"everything else":{"n":13775,"cost":-0.002027}}},{"p_as":0.9,"seed":0,"winter":{"winter (the opening decision)":{"n":307,"cost":9.101,"core":9.524},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":0.6394,"core":0.697},"activity":{"n":307,"cost":0.04267,"core":2.844},"item (the fact)":{"n":308,"cost":0.08201,"core":0.389},"everything else":{"n":11950,"cost":0.2649,"core":0.5674}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.005589},"item (the fact)":{"n":88,"cost":0.001635},"season words":{"n":343,"cost":-0.1811},"everything else":{"n":13775,"cost":-0.005979}}},{"p_as":0.9,"seed":1,"winter":{"winter (the opening decision)":{"n":307,"cost":7.363,"core":8.01},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":0.3794,"core":0.4424},"activity":{"n":307,"cost":0.04204,"core":2.854},"item (the fact)":{"n":308,"cost":0.3681,"core":0.6494},"everything else":{"n":11950,"cost":0.2991,"core":0.6099}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.006463},"item (the fact)":{"n":88,"cost":0.006786},"season words":{"n":343,"cost":-0.1019},"everything else":{"n":13775,"cost":-0.003816}}},{"p_as":0.9,"seed":2,"winter":{"winter (the opening decision)":{"n":307,"cost":8.719,"core":9.647},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":0.5672,"core":0.6436},"activity":{"n":307,"cost":0.03863,"core":2.852},"item (the fact)":{"n":308,"cost":0.09881,"core":0.3733},"everything else":{"n":11950,"cost":0.1837,"core":0.4905}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.007529},"item (the fact)":{"n":88,"cost":0.01995},"season words":{"n":343,"cost":-0.04895},"everything else":{"n":13775,"cost":-0.003078}}},{"p_as":0.95,"seed":0,"winter":{"winter (the opening decision)":{"n":307,"cost":5.882,"core":6.323},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":0.2913,"core":0.3499},"activity":{"n":307,"cost":0.008661,"core":2.811},"item (the fact)":{"n":308,"cost":0.06508,"core":0.3821},"everything else":{"n":11950,"cost":0.07461,"core":0.3773}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.006563},"item (the fact)":{"n":88,"cost":0.00254},"season words":{"n":343,"cost":-0.1737},"everything else":{"n":13775,"cost":-0.005369}}},{"p_as":0.95,"seed":1,"winter":{"winter (the opening decision)":{"n":307,"cost":4.438,"core":5.038},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":0.2155,"core":0.2773},"activity":{"n":307,"cost":0.0309,"core":2.841},"item (the fact)":{"n":308,"cost":0.3024,"core":0.5717},"everything else":{"n":11950,"cost":0.1302,"core":0.4394}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.00606},"item (the fact)":{"n":88,"cost":0.007969},"season words":{"n":343,"cost":-0.1066},"everything else":{"n":13775,"cost":-0.003911}}},{"p_as":0.95,"seed":2,"winter":{"winter (the opening decision)":{"n":307,"cost":5.603,"core":6.473},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":0.2846,"core":0.3599},"activity":{"n":307,"cost":0.03405,"core":2.849},"item (the fact)":{"n":308,"cost":0.07031,"core":0.3385},"everything else":{"n":11950,"cost":0.08053,"core":0.3893}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.004143},"item (the fact)":{"n":88,"cost":0.01832},"season words":{"n":343,"cost":-0.05621},"everything else":{"n":13775,"cost":-0.002656}}},{"p_as":0.98,"seed":0,"winter":{"winter (the opening decision)":{"n":307,"cost":3.625,"core":4.075},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":0.1929,"core":0.2515},"activity":{"n":307,"cost":0.006857,"core":2.813},"item (the fact)":{"n":308,"cost":0.06939,"core":0.3715},"everything else":{"n":11950,"cost":0.04269,"core":0.345}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.03831},"item (the fact)":{"n":88,"cost":0.007764},"season words":{"n":343,"cost":-0.1667},"everything else":{"n":13775,"cost":-0.00539}}},{"p_as":0.98,"seed":1,"winter":{"winter (the opening decision)":{"n":307,"cost":2.629,"core":3.236},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":0.165,"core":0.2276},"activity":{"n":307,"cost":0.03255,"core":2.839},"item (the fact)":{"n":308,"cost":0.2521,"core":0.5231},"everything else":{"n":11950,"cost":0.06656,"core":0.3762}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.004857},"item (the fact)":{"n":88,"cost":0.008856},"season words":{"n":343,"cost":-0.1001},"everything else":{"n":13775,"cost":-0.003667}}},{"p_as":0.98,"seed":2,"winter":{"winter (the opening decision)":{"n":307,"cost":3.485,"core":4.348},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":0.2068,"core":0.2819},"activity":{"n":307,"cost":0.0328,"core":2.843},"item (the fact)":{"n":308,"cost":0.05105,"core":0.3156},"everything else":{"n":11950,"cost":0.06135,"core":0.3698}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.007987},"item (the fact)":{"n":88,"cost":0.02121},"season words":{"n":343,"cost":-0.05552},"everything else":{"n":13775,"cost":-0.002522}}},{"p_as":1.0,"seed":0,"winter":{"winter (the opening decision)":{"n":307,"cost":2.727,"core":3.177},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":0.161,"core":0.2196},"activity":{"n":307,"cost":0.01024,"core":2.817},"item (the fact)":{"n":308,"cost":0.08433,"core":0.383},"everything else":{"n":11950,"cost":0.03799,"core":0.3402}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":0.0004752},"item (the fact)":{"n":88,"cost":0.007924},"season words":{"n":343,"cost":-0.1649},"everything else":{"n":13775,"cost":-0.004927}}},{"p_as":1.0,"seed":1,"winter":{"winter (the opening decision)":{"n":307,"cost":2.015,"core":2.584},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":0.1444,"core":0.207},"activity":{"n":307,"cost":0.02758,"core":2.843},"item (the fact)":{"n":308,"cost":0.3012,"core":0.5752},"everything else":{"n":11950,"cost":0.04882,"core":0.358}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.004806},"item (the fact)":{"n":88,"cost":0.008837},"season words":{"n":343,"cost":-0.1095},"everything else":{"n":13775,"cost":-0.004}}},{"p_as":1.0,"seed":2,"winter":{"winter (the opening decision)":{"n":307,"cost":2.7,"core":3.557},"scaffold (cold, snow, fell, went, took)":{"n":1528,"cost":0.187,"core":0.2618},"activity":{"n":307,"cost":0.0167,"core":2.825},"item (the fact)":{"n":308,"cost":0.04627,"core":0.3112},"everything else":{"n":11950,"cost":0.04346,"core":0.3524}},"retained":{"scaffold (cold, snow, fell, went, took)":{"n":194,"cost":-0.005647},"item (the fact)":{"n":88,"cost":0.01931},"season words":{"n":343,"cost":-0.05511},"everything else":{"n":13775,"cost":-0.002469}}}]};
+
+  var PAS = ["0", "0.1", "0.25", "0.5", "0.75", "0.9", "0.95", "0.98", "1"];
+  var ACT = ["sledding", "skating", "skiing", "caroling", "snowshoeing", "tobogganing", "icefishing", "snowboarding",
+             "bobsledding", "curling", "snowballing", "iceracing", "fortbuilding", "snowangeling", "hockey", "igloobuilding"];
+  var ITEM = ["sled", "skates", "mittens", "scarf"];
+  var ITEM_OF = {};
+  ACT.forEach(function (a, i) { ITEM_OF[a] = ITEM[i % 4]; });
+  var KIND = {own_wm: "own direction", own_caa: "own CAA", full_dm: "full model's direction",
+              module_mean: "module mean", module_dm: "module mean − ordinary", dense_wm: "dense direction"};
+  var NS = "http://www.w3.org/2000/svg";
+  var SUP = {"-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹"};
+
+  /* ---------- helpers ---------- */
+  function sv(tag, attrs, parent) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function tx(parent, x, y, s, style, anchor) {
+    var t = sv("text", {x: x, y: y, "text-anchor": anchor || "start", style: style}, parent);
+    t.textContent = s;
+    return t;
+  }
+  function el(tag, cls, html) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html != null) n.innerHTML = html;
+    return n;
+  }
+  function sup(s) { return String(s).split("").map(function (c) { return SUP[c] || c; }).join(""); }
+  function fmtP(v) {
+    if (v >= 0.00095) return String(+v.toPrecision(2));
+    var e = v.toExponential(1).split("e");
+    return e[0] + "×10" + sup(+e[1]);
+  }
+  function fmtRange(vals) {
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+    return fmtP(lo) + "–" + fmtP(hi);
+  }
+  function gmean(a) { return Math.exp(a.reduce(function (s, v) { return s + Math.log(v); }, 0) / a.length); }
+  function mean(a) { return a.reduce(function (s, v) { return s + v; }, 0) / a.length; }
+  function signed(v) { return (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(2); }
+  function pct(v) { return Math.round(v * 100) + "%"; }
+  var MONO = "font-family: var(--mono); font-size: 11px; fill: var(--muted)";
+  var LAB = "font-family: var(--body); font-size: 13px; fill: var(--ink)";
+  var HEAD = "font-family: var(--display); font-weight: 600; font-size: 13.5px; fill: var(--ink)";
+
+  /* tooltip shared by every chart in one figure */
+  function tipEl(fig) {
+    var t = fig.querySelector(".tip");
+    if (!t) { t = el("div", "tip"); t.hidden = true; t.setAttribute("role", "status"); fig.appendChild(t); }
+    return t;
+  }
+  function bindTip(node, fig, html) {
+    function show() {
+      var t = tipEl(fig);
+      t.innerHTML = html;
+      t.hidden = false;
+      var fr = fig.getBoundingClientRect(), r = node.getBoundingClientRect();
+      var tw = t.offsetWidth, th = t.offsetHeight;
+      var x = Math.max(2, Math.min(fr.width - tw - 2, r.left + r.width / 2 - fr.left - tw / 2));
+      var y = r.top - fr.top - th - 8;
+      if (y < 0) y = r.bottom - fr.top + 8;
+      t.style.left = x + "px";
+      t.style.top = y + "px";
+    }
+    function hide() { tipEl(fig).hidden = true; }
+    node.addEventListener("pointerenter", show);
+    node.addEventListener("pointerleave", hide);
+    node.addEventListener("focus", show);
+    node.addEventListener("blur", hide);
+    node.addEventListener("click", show);
+  }
+  function dotWithTip(g, fig, cx, cy, r, style, tip) {
+    sv("circle", {cx: cx, cy: cy, r: r, style: style}, g);
+    var h = sv("circle", {cx: cx, cy: cy, r: Math.max(r + 3, 6), "class": "hit",
+                          style: "fill: transparent; stroke: none"}, g);
+    bindTip(h, fig, tip);
+  }
+
+  function logY(lo, hi, top, bottom) {
+    return function (v) {
+      var l = Math.log10(Math.max(v, Math.pow(10, lo)));
+      return bottom - (l - lo) / (hi - lo) * (bottom - top);
+    };
+  }
+  function linY(lo, hi, top, bottom) {
+    return function (v) { return bottom - (v - lo) / (hi - lo) * (bottom - top); };
+  }
+  function decadeLabel(e) { return e === 0 ? "1" : "10" + sup(e); }
+  /* SVG text with "p_as" set as p + subscript */
+  function pasText(parent, x, y, s, style, anchor) {
+    var t = sv("text", {x: x, y: y, "text-anchor": anchor || "start", style: style}, parent);
+    var parts = s.split("p_as");
+    parts.forEach(function (part, i) {
+      if (i > 0) {
+        var p = sv("tspan", {}, t); p.textContent = "p";
+        var a = sv("tspan", {dy: "3", style: "font-size: 0.72em"}, t); a.textContent = "as";
+        var back = sv("tspan", {dy: "-3"}, t); back.textContent = part;
+      } else if (part) {
+        var first = sv("tspan", {}, t); first.textContent = part;
+      }
+    });
+    return t;
+  }
+
+  /* shared x layout for the p_as charts: 9 p_as columns, a gap, filtered and dense */
+  function xLayout(W, m, narrow) {
+    var ref = narrow ? 2 : 1.5;
+    var units = 9 + 0.6 + 2 * ref;
+    var u = (W - m.l - m.r) / units;
+    var pos = {};
+    PAS.forEach(function (p, i) { pos[p] = m.l + u * (i + 0.5); });
+    pos.filter = m.l + u * (9.6 + ref / 2);
+    pos.dense = m.l + u * (9.6 + ref * 1.5);
+    return {pos: pos, u: u, sep: m.l + u * 9.3};
+  }
+  function xAxis(svg, X, y, narrow) {
+    PAS.forEach(function (p) {
+      var s = narrow && p.indexOf("0.") === 0 ? p.slice(1) : p;
+      tx(svg, X.pos[p], y, s, MONO, "middle");
+    });
+    tx(svg, X.pos.filter, y, narrow ? "filter" : "filtered", MONO, "middle");
+    tx(svg, X.pos.dense, y, "dense", MONO, "middle");
+  }
+  function sweepPanel(svg, X, W, m, top, h, cfg) {
+    var bottom = top + h;
+    var y = cfg.log ? logY(cfg.lo, cfg.hi, top, bottom) : linY(cfg.lo, cfg.hi, top, bottom);
+    cfg.ticks.forEach(function (t) {
+      sv("line", {x1: m.l, x2: W - m.r, y1: y(t.v), y2: y(t.v), style: "stroke: var(--rule); stroke-width: 1"}, svg);
+      tx(svg, m.l - 6, y(t.v) + 4, t.s, MONO, "end");
+    });
+    sv("line", {x1: X.sep, x2: X.sep, y1: top, y2: bottom, style: "stroke: var(--rule); stroke-width: 1"}, svg);
+    tx(svg, m.l, top - 9, cfg.title, HEAD);
+    return y;
+  }
+  function polyline(svg, pts, style) {
+    sv("polyline", {points: pts.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" "),
+                    style: "fill: none; " + style}, svg);
+  }
+  /* dashed threshold line; its label sits in the right gutter (m.r), clear of the data */
+  function guide(svg, W, m, y, label, color) {
+    sv("line", {x1: m.l, x2: W - m.r, y1: y, y2: y, style: "stroke: " + color + "; stroke-width: 1.3; stroke-dasharray: 4 4"}, svg);
+    if (label) tx(svg, W - 1, y + 3.5, label, "font-family: var(--mono); font-size: 10px; fill: " + color, "end");
+  }
+  function seedOffset(j, n, step) { return (j - (n - 1) / 2) * step; }
+  var SHIPS = function (p) { return p === "filter" ? D.filter : p === "dense" ? D.dense : D.gram[p]; };
+  var COLS = PAS.concat(["filter", "dense"]);
+  function colName(p) { return p === "filter" ? "filtered" : p === "dense" ? "dense" : "p_as " + p; }
+
+  /* ---------- Figure: p_as 0.5 dot plot ---------- */
+  function drawForest() {
+    var host = document.getElementById("chForest"), fig = document.getElementById("figForest");
+    host.innerHTML = "";
+    var W = Math.max(300, host.clientWidth), wide = W >= 680;
+    var g05 = D.gram["0.5"];
+    function rows(ships, list) { return list.map(function (r) { r.vals = ships.map(r.f); return r; }); }
+    var groups = [
+      {name: "GRAM, p_as 0.5, module deleted", rows: rows(g05, [
+        {label: "Unsteered", f: function (s) { return s.p; }, c: "var(--off)"},
+        {label: "Best of 8 random directions", f: function (s) { return s.rand.p; }, c: "var(--rand)"},
+        {label: "Best vector from winter data", f: function (s) { return s.data.p; }, c: "var(--data)"},
+        {label: "Push toward “winter”", f: function (s) { return s.token.p; }, c: "var(--word)"},
+        {label: "Module output patched back in (ceiling)", f: function (s) { return s.module_dec.p; }, c: "var(--on)", hollow: true},
+        {label: "Module attached (never shipped)", f: function (s) { return s.full; }, c: "var(--on)"}])},
+      {name: "Dense", rows: rows(D.dense, [
+        {label: "Unsteered", f: function (s) { return s.p; }, c: "var(--off)"},
+        {label: "Best of 8 random directions", f: function (s) { return s.rand.p; }, c: "var(--rand)"},
+        {label: "GRAM module's mean output, transplanted", f: function (s) { return s.kinds.gram_module_mean.p; }, c: "var(--data)"},
+        {label: "GRAM full model's direction, transplanted", f: function (s) { return s.kinds.gram_full_dm.p; }, c: "var(--data)"},
+        {label: "Push toward “winter”", f: function (s) { return s.token.p; }, c: "var(--word)"}])},
+      {name: "Filtered", rows: rows(D.filter, [
+        {label: "Unsteered", f: function (s) { return s.p; }, c: "var(--off)"},
+        {label: "Best of 8 random directions", f: function (s) { return s.rand.p; }, c: "var(--rand)"},
+        {label: "Best vector from winter data", f: function (s) { return s.data.p; }, c: "var(--data)"},
+        {label: "Push toward “winter”", f: function (s) { return s.token.p; }, c: "var(--word)"}])}
+    ];
+    var m = {l: wide ? 300 : 8, r: 12, t: 46, b: 34};
+    var rowH = wide ? 27 : 44, grpH = wide ? 30 : 34;
+    var nRows = groups.reduce(function (s, g) { return s + g.rows.length; }, 0);
+    var H = m.t + groups.length * grpH + nRows * rowH + m.b;
+    var svg = sv("svg", {width: W, height: H, viewBox: "0 0 " + W + " " + H}, host);
+    var x0 = m.l, x1 = W - m.r;
+    var x = function (v) { var l = Math.log10(Math.max(v, 1e-7)); return x0 + (l + 7) / 7 * (x1 - x0); };
+    var dense = D.dense.map(function (s) { return s.p; });
+    var dlo = x(Math.min.apply(null, dense)), dhi = x(Math.max.apply(null, dense));
+    sv("rect", {x: dlo, y: m.t - 4, width: dhi - dlo, height: H - m.t - m.b + 4, style: "fill: var(--band)"}, svg);
+    tx(svg, dhi, m.t - 24, "dense, unsteered", MONO, "end");
+    sv("line", {x1: dhi, x2: dhi, y1: m.t - 20, y2: m.t - 4, style: "stroke: var(--muted); stroke-width: 1"}, svg);
+    for (var e = -7; e <= 0; e++) {
+      sv("line", {x1: x(Math.pow(10, e)), x2: x(Math.pow(10, e)), y1: m.t - 4, y2: H - m.b,
+                  style: "stroke: var(--rule); stroke-width: 1"}, svg);
+      if (wide || e % 2 !== 0 || e === 0) tx(svg, x(Math.pow(10, e)), H - m.b + 18, decadeLabel(e), MONO, "middle");
+    }
+    sv("line", {x1: x(0.05), x2: x(0.05), y1: m.t - 4, y2: H - m.b, style: "stroke: var(--accent); stroke-width: 1.2; stroke-dasharray: 3 3"}, svg);
+    tx(svg, x(0.05) - 4, m.t - 8, "0.05", "font-family: var(--mono); font-size: 10.5px; fill: var(--accent)", "end");
+    tx(svg, (x0 + x1) / 2, H - 4, "chance of starting a winter story (log scale)", "font-family: var(--body); font-size: 12px; fill: var(--muted)", "middle");
+    var y = m.t;
+    groups.forEach(function (g) {
+      y += grpH;
+      pasText(svg, 0, y - 10, g.name + " · 6 seeds", HEAD);
+      g.rows.forEach(function (r) {
+        var cy = y + (wide ? rowH / 2 : rowH - 12);
+        var range = fmtRange(r.vals);
+        if (wide) {
+          tx(svg, 0, cy + 4, r.label, LAB);
+        } else {
+          var lt = tx(svg, 0, cy - 13, r.label, "font-family: var(--body); font-size: 12.5px; fill: var(--ink)");
+          var rt = sv("tspan", {dx: "8", style: MONO}, lt);
+          rt.textContent = range;
+        }
+        sv("line", {x1: x0, x2: x1, y1: cy, y2: cy, style: "stroke: var(--rule); stroke-width: 1; stroke-dasharray: 1 3"}, svg);
+        var gm = gmean(r.vals);
+        sv("line", {x1: x(gm), x2: x(gm), y1: cy - 8, y2: cy + 8, style: "stroke: var(--ink); stroke-width: 2.4"}, svg);
+        r.vals.forEach(function (v, j) {
+          var style = r.hollow ? "fill: var(--surface); stroke: " + r.c + "; stroke-width: 1.8" :
+                                 "fill: " + r.c + "; fill-opacity: 0.85; stroke: var(--surface); stroke-width: 1";
+          dotWithTip(svg, fig, x(v), cy, 4, style, g.name.replace("p_as", "p<sub>as</sub>") + "<br>" + r.label + "<br>seed " + j + ": " + fmtP(v));
+        });
+        if (wide) {
+          var hiX = x(Math.max.apply(null, r.vals)), loX = x(Math.min.apply(null, r.vals));
+          var tw = range.length * 6.6;
+          if (hiX + 10 + tw < x1) tx(svg, hiX + 9, cy + 4, range, MONO);
+          else tx(svg, loX - 9, cy + 4, range, MONO, "end");
+        }
+        y += rowH;
+      });
+    });
+  }
+
+  /* ---------- Figure: the p_as sweep ---------- */
+  function drawSweep() {
+    var host = document.getElementById("chSweep"), fig = document.getElementById("figSweep");
+    host.innerHTML = "";
+    var W = Math.max(300, host.clientWidth), narrow = W < 560;
+    var m = {l: narrow ? 40 : 48, r: 30, t: 40, b: 38};
+    var hA = narrow ? 200 : 230, hB = narrow ? 120 : 130, hC = narrow ? 120 : 130, gap = 46;
+    var H = m.t + hA + gap + hB + gap + hC + m.b;
+    var svg = sv("svg", {width: W, height: H, viewBox: "0 0 " + W + " " + H}, host);
+    var X = xLayout(W, m, narrow);
+    var ix = X.pos["0.5"];
+    sv("rect", {x: ix - X.u / 2, y: m.t - 4, width: X.u, height: H - m.t - m.b + 4, style: "fill: var(--band)"}, svg);
+    var step = narrow ? 2.2 : 3;
+    var r = narrow ? 2.6 : 3.2;
+
+    var topA = m.t, topB = topA + hA + gap, topC = topB + hB + gap;
+    var ticksA = [];
+    for (var e = -7; e <= 0; e++) if (!narrow || e % 2 !== 0 || e === 0) ticksA.push({v: Math.pow(10, e), s: decadeLabel(e)});
+    var yA = sweepPanel(svg, X, W, m, topA, hA, {log: true, lo: -7, hi: 0, ticks: ticksA,
+      title: narrow ? "Starts a winter story" : "Starts a winter story · chance after “one day in”"});
+    guide(svg, W, m, yA(0.01), "0.01", "var(--accent)");
+    var yB = sweepPanel(svg, X, W, m, topB, hB, {lo: 0, hi: 5, ticks: [0, 1, 2, 3, 4, 5].map(function (v) { return {v: v, s: String(v)}; }),
+      title: narrow ? "Loss on winter stories" : "Loss on winter stories · nats per token"});
+    var yC = sweepPanel(svg, X, W, m, topC, hC, {lo: 0, hi: 1, ticks: [0, 0.25, 0.5, 0.75, 1].map(function (v) { return {v: v, s: String(v)}; }),
+      title: narrow ? "Facts recalled" : "Facts recalled · right item, guessing scores 0.25"});
+    guide(svg, W, m, yC(0.25), "0.25", "var(--muted)");
+
+    function series(y, f, style, tipLabel, fmt, colsOnly, lineStyle, line, agg) {
+      var pts = [];
+      (colsOnly || COLS).forEach(function (p) {
+        var ships = SHIPS(p);
+        var vals = ships.map(f);
+        ships.forEach(function (s, j) {
+          dotWithTip(svg, fig, X.pos[p] + seedOffset(j, ships.length, step), y(vals[j]), r, style,
+                     colName(p).replace("p_as", "p<sub>as</sub>") + " · seed " + s.seed + "<br>" + tipLabel + ": " + fmt(vals[j]));
+        });
+        var a = agg(vals);
+        if (PAS.indexOf(p) >= 0) pts.push([X.pos[p], y(a)]);
+        else sv("line", {x1: X.pos[p] - X.u * 0.42, x2: X.pos[p] + X.u * 0.42, y1: y(a), y2: y(a), style: lineStyle}, svg);
+      });
+      if (line) polyline(svg, pts, lineStyle);
+    }
+    var OFF = "fill: var(--off); fill-opacity: 0.8; stroke: var(--surface); stroke-width: 0.8";
+    var ON = "fill: var(--surface); stroke: var(--on); stroke-width: 1.5";
+    series(yA, function (s) { return s.full; }, ON, "with module", fmtP, PAS, "stroke: var(--on); stroke-width: 1.8; stroke-dasharray: 5 4", true, gmean);
+    series(yA, function (s) { return s.p; }, OFF, "shipped model", fmtP, null, "stroke: var(--off); stroke-width: 2.2", true, gmean);
+    series(yB, function (s) { return s.tgt; }, OFF, "loss on winter stories", function (v) { return v.toFixed(2); }, null, "stroke: var(--off); stroke-width: 2.2", true, mean);
+    series(yC, function (s) { return s.spec; }, OFF, "facts recalled", function (v) { return v.toFixed(2); }, null, "stroke: var(--off); stroke-width: 2.2", true, mean);
+
+    xAxis(svg, X, H - m.b + 18, narrow);
+    pasText(svg, (m.l + X.pos["1"] + X.u / 2) / 2, H - 4,
+            narrow ? "p_as: chance winter text trains the core" : "p_as: chance that a batch's winter text also trains the core",
+            "font-family: var(--body); font-size: 12px; fill: var(--muted)", "middle");
+  }
+
+  /* ---------- Figure: steering across p_as ---------- */
+  function drawSteer() {
+    var host = document.getElementById("chSteer"), fig = document.getElementById("figSteer");
+    host.innerHTML = "";
+    var W = Math.max(300, host.clientWidth), narrow = W < 560;
+    var m = {l: narrow ? 40 : 48, r: 30, t: 30, b: 38};
+    var hA = narrow ? 240 : 270, hB = narrow ? 150 : 170, gap = 50;
+    var H = m.t + hA + gap + hB + m.b;
+    var svg = sv("svg", {width: W, height: H, viewBox: "0 0 " + W + " " + H}, host);
+    var X = xLayout(W, m, narrow);
+    var r = narrow ? 2.3 : 3;
+    var topA = m.t, topB = topA + hA + gap;
+    var ticksA = [];
+    for (var e = -8; e <= 0; e++) if (!narrow || e % 2 === 0) ticksA.push({v: Math.pow(10, e), s: decadeLabel(e)});
+    var yA = sweepPanel(svg, X, W, m, topA, hA, {log: true, lo: -8, hi: 0, ticks: ticksA,
+      title: narrow ? "Starts winter, best setting" : "Starts a winter story · at each family's best setting"});
+    guide(svg, W, m, yA(0.05), "0.05", "var(--accent)");
+
+    var all = [];
+    COLS.forEach(function (p) { SHIPS(p).forEach(function (s) { all.push(s.token.margin, s.data.margin); }); });
+    var lo = Math.floor(Math.min.apply(null, all)) - 1, hi = Math.ceil(Math.max.apply(null, all)) + 1;
+    if (lo % 2) lo -= 1;
+    if (hi % 2) hi += 1;
+    var ticksB = [];
+    for (var v = lo; v <= hi; v += 2) ticksB.push({v: v, s: v > 0 ? "+" + v : v < 0 ? "−" + Math.abs(v) : "0"});
+    var yB = sweepPanel(svg, X, W, m, topB, hB, {lo: lo, hi: hi, ticks: ticksB,
+      title: narrow ? "Gain over best random, log-odds" : "Gain over the best random direction · log-odds"});
+    guide(svg, W, m, yB(2), "+2", "var(--accent)");
+
+    var fams = [
+      {f: function (s) { return s.p; }, c: "var(--off)", name: "unsteered", off: -0.3},
+      {f: function (s) { return s.rand.p; }, c: "var(--rand)", name: "best random", off: -0.1},
+      {f: function (s) { return s.data.p; }, c: "var(--data)", name: "best from winter data", off: 0.1, kind: true},
+      {f: function (s) { return s.token.p; }, c: "var(--word)", name: "push toward “winter”", off: 0.3}
+    ];
+    function draw(y, list, fmt, agg) {
+      list.forEach(function (fm) {
+        var pts = [];
+        COLS.forEach(function (p) {
+          var ships = SHIPS(p), vals = ships.map(fm.f);
+          var cx = X.pos[p] + fm.off * X.u;
+          ships.forEach(function (s, j) {
+            var extra = fm.kind ? " (" + (KIND[s.data.kind] || s.data.kind.replace("gram_", "GRAM ")) + ")" : "";
+            dotWithTip(svg, fig, cx + seedOffset(j, ships.length, narrow ? 0.6 : 1), y(vals[j]), r,
+                       "fill: " + fm.c + "; fill-opacity: 0.85; stroke: var(--surface); stroke-width: 0.7",
+                       colName(p).replace("p_as", "p<sub>as</sub>") + " · seed " + s.seed + "<br>" + fm.name + extra + ": " + fmt(vals[j]));
+          });
+          var a = agg(vals);
+          if (PAS.indexOf(p) >= 0) pts.push([cx, y(a)]);
+          else sv("line", {x1: cx - X.u * 0.16, x2: cx + X.u * 0.16, y1: y(a), y2: y(a), style: "stroke: " + fm.c + "; stroke-width: 2.4"}, svg);
+        });
+        polyline(svg, pts, "stroke: " + fm.c + "; stroke-width: 1.8; stroke-opacity: 0.9");
+      });
+    }
+    draw(yA, fams, fmtP, gmean);
+    draw(yB, [
+      {f: function (s) { return s.data.margin; }, c: "var(--data)", name: "best from winter data", off: -0.15, kind: true},
+      {f: function (s) { return s.token.margin; }, c: "var(--word)", name: "push toward “winter”", off: 0.15}
+    ], signed, mean);
+    sv("line", {x1: m.l, x2: W - m.r, y1: yB(0), y2: yB(0), style: "stroke: var(--muted); stroke-width: 1"}, svg);
+    xAxis(svg, X, H - m.b + 18, narrow);
+    pasText(svg, (m.l + X.pos["1"] + X.u / 2) / 2, H - 4, "p_as", "font-family: var(--body); font-size: 12px; fill: var(--muted)", "middle");
+  }
+
+  /* ---------- Figure: story outcomes ---------- */
+  function drawStories() {
+    var host = document.getElementById("storyGrid"), fig = document.getElementById("figStories");
+    host.innerHTML = "";
+    var g1 = D.gram["1"];
+    var groups = [
+      {name: "GRAM, p<sub>as</sub> 1, module deleted", rows: [
+        {label: "From “one day in”", ships: g1, k: "base", src: "free", c: "var(--off)"},
+        {label: "+ push toward “winter”", ships: g1, k: "token", src: "free", c: "var(--word)"},
+        {label: "+ module's mean output (MNIST recipe)", ships: g1, k: "module_mean", src: "free", c: "var(--data)"},
+        {label: "Given “one day in winter”", ships: g1, k: "base", src: "forced", c: "var(--off)", given: true},
+        {label: "Given “one day in winter”, push still on", ships: g1, k: "token", src: "forced", c: "var(--word)", given: true}]},
+      {name: "Dense", rows: [
+        {label: "From “one day in”", ships: D.dense, k: "base", src: "free", c: "var(--dense)"},
+        {label: "+ push toward “winter”", ships: D.dense, k: "token", src: "free", c: "var(--word)"},
+        {label: "Given “one day in winter”", ships: D.dense, k: "base", src: "forced", c: "var(--dense)", given: true}]},
+      {name: "Filtered", rows: [
+        {label: "+ push toward “winter”", ships: D.filter, k: "token", src: "free", c: "var(--word)"},
+        {label: "Given “one day in winter”", ships: D.filter, k: "base", src: "forced", c: "var(--rand)", given: true}]}
+    ];
+    var mets = [
+      {name: "Opens with winter", f: function (st) { return st.open; }},
+      {name: "Writes “went <activity>”", f: function (st) { return st.went; }},
+      {name: "Names the right item", f: function (st) { return st.right / 64; }}
+    ];
+    host.appendChild(el("div", "hd", ""));
+    mets.forEach(function (mt) { host.appendChild(el("div", "hd", mt.name.replace("<", "&lt;").replace(">", "&gt;") + "<span class='sub'>share of 64</span>")); });
+    host.appendChild(el("div", "hd", "Right ÷ reached item<span class='sub'>all seeds</span>"));
+    groups.forEach(function (g) {
+      host.appendChild(el("div", "grp", g.name));
+      g.rows.forEach(function (r) {
+        host.appendChild(el("div", "lab", r.label));
+        var sts = r.ships.map(function (s) { return s.stories[r.k][r.src]; });
+        mets.forEach(function (mt, mi) {
+          if (mi === 0 && r.given) {
+            host.appendChild(el("div", "cellm", "<span class='mname'>" + mt.name + "</span><span class='given'>set by the prompt</span><span></span>"));
+            return;
+          }
+          var vals = sts.map(mt.f), mu = mean(vals);
+          var cell = el("div", "cellm");
+          cell.appendChild(el("span", "mname", mt.name.replace("<", "&lt;").replace(">", "&gt;")));
+          var trk = el("span", "trk");
+          var fl = el("span", "fl");
+          fl.style.width = (mu * 100).toFixed(1) + "%";
+          fl.style.background = r.c;
+          trk.appendChild(fl);
+          vals.forEach(function (v) {
+            var tk = el("span", "tk");
+            tk.style.left = "calc(" + (v * 100).toFixed(2) + "% + " + (v < 0.01 ? 1 : v > 0.99 ? -1 : 0) + "px)";
+            tk.style.background = r.c;
+            trk.appendChild(tk);
+          });
+          trk.className = "trk hit";
+          bindTip(trk, fig, r.label + "<br>" + mt.name.replace("<", "&lt;").replace(">", "&gt;") + "<br>" +
+                  r.ships.map(function (s, j) { return "seed " + s.seed + ": " + pct(vals[j]); }).join(" · "));
+          cell.appendChild(trk);
+          cell.appendChild(el("span", "v", pct(mu)));
+          host.appendChild(cell);
+        });
+        var right = sts.reduce(function (s, st) { return s + st.right; }, 0);
+        var took = sts.reduce(function (s, st) { return s + st.took; }, 0);
+        var per = sts.filter(function (st) { return st.took > 0; }).map(function (st) { return st.right / st.took; });
+        var sub = per.length ? (per.length > 1 ? "seeds " + Math.round(100 * Math.min.apply(null, per)) + "–" + pct(Math.max.apply(null, per)) : "one seed") : "none reached";
+        host.appendChild(el("div", "ratio", "<span class='mname'>Right ÷ reached item, all seeds</span>" + right + " / " + took + "<span class='sub'>" + sub + "</span>"));
+      });
+    });
+  }
+
+  /* ---------- sampled stories ---------- */
+  function markStory(text, nPrefix) {
+    var w = text.split(" ");
+    var cls = w.map(function () { return ""; });
+    var verdict = {opens: w[3] === "winter", went: false, took: false, right: false};
+    w.forEach(function (t, i) { if (t === "winter") cls[i] = "r-w"; });
+    for (var i = 0; i < w.length - 1; i++) {
+      if (w[i] === "cold" && w[i - 2] === "it" && w[i + 1] === "and") { cls[i] = "r-s"; }
+      if (w[i] === "snow" && w[i + 1] === "fell") { cls[i] = "r-s"; cls[i + 1] = "r-s"; }
+    }
+    var mark = {};
+    for (var a = 0; a < w.length - 1; a++) {
+      if (w[a] === "went" && ITEM_OF[w[a + 1]]) {
+        verdict.went = true;
+        cls[a] = "r-s"; cls[a + 1] = "r-a";
+        for (var j = a + 2; j < w.length - 2; j++) {
+          if (w[j] === "took" && w[j + 1] === "the") {
+            verdict.took = true;
+            cls[j] = "r-s";
+            cls[j + 2] = ITEM.indexOf(w[j + 2]) >= 0 ? "r-i" : "r-n";
+            verdict.right = w[j + 2] === ITEM_OF[w[a + 1]];
+            mark[j + 2] = verdict.right ? " ✓" : " ✗";
+            break;
+          }
+        }
+        break;
+      }
+    }
+    var html = w.map(function (t, i) {
+      var s = t.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+      if (i < nPrefix) s = "<span class='muted'>" + s + "</span>";
+      if (cls[i]) s = "<mark class='" + cls[i] + "'>" + s + (mark[i] || "") + "</mark>";
+      return s;
+    }).join(" ");
+    return {html: html, v: verdict};
+  }
+  function drawSamples() {
+    var host = document.getElementById("samples");
+    host.innerHTML = "";
+    host.appendChild(el("div", "hd", ""));
+    host.appendChild(el("div", "hd", "Push toward “winter”, from “one day in”"));
+    host.appendChild(el("div", "hd", "No push, given “one day in winter”"));
+    D.gram["1"].forEach(function (s) {
+      host.appendChild(el("div", "sd", "seed " + s.seed));
+      [["token", "free", 3, "Push toward “winter”"], ["base", "forced", 4, "Given “one day in winter”"]].forEach(function (c) {
+        var ex = markStory(s.examples[c[0]][c[1]], c[2]);
+        var v = ex.v, chip, good;
+        if (c[1] === "free" && !v.opens) { chip = "opens with " + s.examples[c[0]][c[1]].split(" ")[3]; good = false; }
+        else if (!v.went) { chip = c[1] === "free" ? "opens with winter · no story" : "no story"; good = false; }
+        else if (!v.took) { chip = "story · no item"; good = false; }
+        else { chip = "story · " + (v.right ? "right item" : "wrong item"); good = v.right; }
+        var box = el("div", "story", "<span class='verdict " + (good ? "good" : "bad") + "'>" + chip + "</span><br>" + ex.html);
+        box.setAttribute("data-cond", c[3]);
+        host.appendChild(box);
+      });
+    });
+  }
+
+  /* ---------- per-seed table ---------- */
+  function drawVerdict() {
+    var tb = document.getElementById("verdict");
+    tb.innerHTML = "";
+    ["0.95", "0.98", "1"].forEach(function (p) {
+      D.gram[p].forEach(function (s, i) {
+        var f = D.filter.filter(function (x) { return x.seed === s.seed; })[0];
+        var t = s.token, ft = f.token;
+        var tPass = t.margin >= 2 && t.p >= 0.05, fPass = ft.margin >= 2 && ft.p >= 0.05;
+        var removed = s.p < 0.01;
+        var spec = tPass && !fPass;
+        var st = s.stories.base.forced;
+        var tr = el("tr", i === 0 ? "gstart" : "");
+        tr.innerHTML =
+          "<th class='num'>" + p + " · " + s.seed + "</th>" +
+          "<td class='num'>" + fmtP(s.p) + "<span class='sub " + (removed ? "yes" : "no") + "'>" + (removed ? "looks removed" : "not removed") + "</span></td>" +
+          "<td class='num'>" + fmtP(t.p) + " · " + signed(t.margin) + "<span class='sub'>" + (tPass ? "passes both" : "fails") + "</span></td>" +
+          "<td class='num'>" + fmtP(ft.p) + " · " + signed(ft.margin) + "<span class='sub'>" + (fPass ? "passes both" : "fails") + "</span></td>" +
+          "<td><span class='" + (spec ? "yes" : "no") + "'>" + (spec ? "Yes" : "No") + "</span><span class='sub'>" +
+            (spec ? "filtered push stays below 0.05" : tPass ? "filtered model's push passes too" : "push fails") + "</span></td>" +
+          "<td class='num'>" + fmtP(s.data.p) + " · " + signed(s.data.margin) + "<span class='sub'>" + KIND[s.data.kind] +
+            (s.data.margin >= 2 && s.data.p >= 0.05 ? "</span><span class='sub yes'>passes both; filtered not tried" : "") + "</span></td>" +
+          "<td class='num'>" + st.right + " ÷ " + st.took + "<span class='sub'>of 64 samples</span></td>";
+        tb.appendChild(tr);
+      });
+    });
+  }
+
+  /* ---------- Figure: token roles ---------- */
+  var ROLE = [
+    {k: "winter (the opening decision)", name: "“winter”", c: "var(--word)"},
+    {k: "scaffold (cold, snow, fell, went, took)", name: "scaffold", c: "var(--data)"},
+    {k: "activity", name: "activity", c: "var(--on)"},
+    {k: "item (the fact)", name: "item", c: "var(--off)"},
+    {k: "everything else", name: "everything else", c: "var(--rand)"}
+  ];
+  function drawRoles() {
+    var host = document.getElementById("chRoles"), fig = document.getElementById("figRoles");
+    host.innerHTML = "";
+    var W = Math.max(300, host.clientWidth), side = W >= 700;
+    var ps = [];
+    D.roles.forEach(function (r) { if (ps.indexOf(r.p_as) < 0) ps.push(r.p_as); });
+    ps.sort(function (a, b) { return a - b; });
+    var pw = side ? (W - 40) / 2 : W;
+    var hP = side ? 300 : 260;
+    var H = side ? hP : hP * 2 + 40;
+    var svg = sv("svg", {width: W, height: H, viewBox: "0 0 " + W + " " + H}, host);
+
+    // left panel: per-token cost, log scale
+    var m = {l: 46, r: 10, t: 28, b: 40};
+    var oxL = 0, oyL = 0;
+    var x0 = oxL + m.l, x1 = oxL + pw - m.r, top = oyL + m.t, bottom = oyL + hP - m.b;
+    var u = (x1 - x0) / ps.length;
+    var xp = function (i) { return x0 + u * (i + 0.5); };
+    var y = logY(Math.log10(0.005), Math.log10(20), top, bottom);
+    [0.01, 0.1, 1, 10].forEach(function (v) {
+      sv("line", {x1: x0, x2: x1, y1: y(v), y2: y(v), style: "stroke: var(--rule); stroke-width: 1"}, svg);
+      tx(svg, x0 - 6, y(v) + 4, String(v), MONO, "end");
+    });
+    tx(svg, oxL, oyL + 14, "Cost per token · nats, log scale", HEAD);
+    ROLE.forEach(function (role) {
+      var pts = [];
+      ps.forEach(function (p, i) {
+        var rs = D.roles.filter(function (r) { return r.p_as === p; });
+        var vals = rs.map(function (r) { return r.winter[role.k].cost; });
+        rs.forEach(function (r, j) {
+          dotWithTip(svg, fig, xp(i) + seedOffset(j, rs.length, 3), y(vals[j]), 2.2,
+                     "fill: " + role.c + "; fill-opacity: 0.45", role.name + " · p<sub>as</sub> " + p + " · seed " + r.seed + "<br>" + vals[j].toFixed(3) + " nats");
+        });
+        pts.push([xp(i), y(mean(vals))]);
+      });
+      polyline(svg, pts, "stroke: " + role.c + "; stroke-width: 2.2");
+      pts.forEach(function (pt) { sv("circle", {cx: pt[0], cy: pt[1], r: 3.4, style: "fill: " + role.c}, svg); });
+    });
+    ps.forEach(function (p, i) { tx(svg, xp(i), bottom + 18, String(p), MONO, "middle"); });
+    pasText(svg, (x0 + x1) / 2, oyL + hP - 4, "p_as", "font-family: var(--body); font-size: 12px; fill: var(--muted)", "middle");
+
+    // right panel: token-weighted share of the total cost (mean of per-seed shares)
+    var oxR = side ? pw + 40 : 0, oyR = side ? 0 : hP + 40;
+    var mr = {l: 46, r: 10, t: 28, b: 40};
+    var rx0 = oxR + mr.l, rx1 = oxR + pw - mr.r, rtop = oyR + mr.t, rbottom = oyR + hP - mr.b;
+    var ru = (rx1 - rx0) / ps.length;
+    var ry = linY(0, 1, rtop, rbottom);
+    [0, 0.25, 0.5, 0.75, 1].forEach(function (v) {
+      sv("line", {x1: rx0, x2: rx1, y1: ry(v), y2: ry(v), style: "stroke: var(--rule); stroke-width: 1"}, svg);
+      tx(svg, rx0 - 6, ry(v) + 4, Math.round(v * 100) + "%", MONO, "end");
+    });
+    tx(svg, oxR, oyR + 14, "Share of the total cost · by token count", HEAD);
+    ps.forEach(function (p, i) {
+      var rs = D.roles.filter(function (r) { return r.p_as === p; });
+      var shares = ROLE.map(function (role) {
+        return mean(rs.map(function (r) {
+          var tot = ROLE.reduce(function (s, q) { return s + r.winter[q.k].n * r.winter[q.k].cost; }, 0);
+          return r.winter[role.k].n * r.winter[role.k].cost / tot;
+        }));
+      });
+      var acc = 0, bx = rx0 + ru * i + ru * 0.18, bw = ru * 0.64;
+      shares.forEach(function (sh, k) {
+        var yTop = ry(acc + sh), yBot = ry(acc);
+        var rect = sv("rect", {x: bx, y: yTop, width: bw, height: Math.max(0, yBot - yTop), "class": "hit",
+                               style: "fill: " + ROLE[k].c + "; stroke: var(--surface); stroke-width: 1"}, svg);
+        bindTip(rect, fig, ROLE[k].name + " · p<sub>as</sub> " + p + "<br>" + pct(sh) + " of the cost");
+        acc += sh;
+      });
+      tx(svg, bx + bw / 2, ry(shares[0]) + 15, pct(shares[0]), "font-family: var(--mono); font-size: 11px; font-weight: 600; fill: var(--surface); pointer-events: none", "middle");
+      tx(svg, rx0 + ru * (i + 0.5), rbottom + 18, String(p), MONO, "middle");
+    });
+    pasText(svg, (rx0 + rx1) / 2, oyR + hP - 4, "p_as", "font-family: var(--body); font-size: 12px; fill: var(--muted)", "middle");
+  }
+
+  function drawAll() {
+    drawForest();
+    drawSweep();
+    drawSteer();
+    drawRoles();
+  }
+  drawStories();
+  drawSamples();
+  drawVerdict();
+  drawAll();
+  var last = 0;
+  function onResize() {
+    var w = document.getElementById("chSweep").clientWidth;
+    if (Math.abs(w - last) > 2) { last = w; drawAll(); }
+  }
+  if (window.ResizeObserver) new ResizeObserver(onResize).observe(document.getElementById("chSweep"));
+  else window.addEventListener("resize", onResize);
+})();
+</script>
+</body>
+</html>
